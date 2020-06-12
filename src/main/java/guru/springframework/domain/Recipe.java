@@ -1,18 +1,23 @@
 package guru.springframework.domain;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
 @Data
+@EqualsAndHashCode(exclude = {"categories"})
 @Entity
 public class Recipe {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToMany(mappedBy = "recipes")
+    private Set<Category> categories = new HashSet<>();
 
     private String description;
     private Integer prepTime;
@@ -38,8 +43,7 @@ public class Recipe {
     @OneToMany(cascade = CascadeType.ALL, mappedBy="recipe")
     private Set<Ingredient> ingredients = new HashSet<>();
 
-    @ManyToMany(mappedBy = "recipes")
-    private Set<Category> categories = new HashSet<>();
+
 
 
     public void setNotes(Notes notes) {
