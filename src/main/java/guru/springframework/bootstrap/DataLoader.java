@@ -56,61 +56,51 @@ public class DataLoader implements CommandLineRunner {
         ingredient1.setDescription("ripe avocados");
         ingredient1.setAmount(new BigDecimal(2));
         ingredient1.setUnitOfMeasure(each);
-        ingredient1.setRecipe(recipe);
 
         Ingredient ingredient2 = new Ingredient();
         ingredient2.setDescription("salt, more to taste");
         ingredient2.setAmount(new BigDecimal("0.25"));
         ingredient2.setUnitOfMeasure(tsp);
-        ingredient2.setRecipe(recipe);
 
         Ingredient ingredient3 = new Ingredient();
         ingredient3.setDescription("fresh lime juice or lemon juice");
         ingredient3.setAmount(new BigDecimal(1));
         ingredient3.setUnitOfMeasure(tsb);
-        ingredient3.setRecipe(recipe);
 
         Ingredient ingredient4 = new Ingredient();
         ingredient4.setDescription("minced red onion or thinly sliced green onion");
         ingredient4.setAmount(new BigDecimal(2));
         ingredient4.setUnitOfMeasure(tsb);
-        ingredient4.setRecipe(recipe);
 
         Ingredient ingredient5 = new Ingredient();
         ingredient5.setDescription("serrano chiles, stems and seeds removed, minced");
         ingredient5.setAmount(new BigDecimal(1));
         ingredient5.setUnitOfMeasure(each);
-        ingredient5.setRecipe(recipe);
-
+        
         Ingredient ingredient6 = new Ingredient();
         ingredient6.setDescription("cilantro (leaves and tender stems), finely chopped");
         ingredient6.setAmount(new BigDecimal(2));
         ingredient6.setUnitOfMeasure(tsb);
-        ingredient6.setRecipe(recipe);
 
         Ingredient ingredient7 = new Ingredient();
         ingredient7.setDescription("freshly grated black pepper");
         ingredient7.setAmount(new BigDecimal(1));
         ingredient7.setUnitOfMeasure(dash);
-        ingredient7.setRecipe(recipe);
 
         Ingredient ingredient8 = new Ingredient();
         ingredient8.setDescription("ripe tomato, seeds and pulp removed, chopped");
         ingredient8.setAmount(new BigDecimal("0.5"));
         ingredient8.setUnitOfMeasure(each);
-        ingredient8.setRecipe(recipe);
-
+        
         Ingredient ingredient9 = new Ingredient();
         ingredient9.setDescription("Red radishes or jicama, to garnish");
         ingredient9.setAmount(null);
         ingredient9.setUnitOfMeasure(each);
-        ingredient9.setRecipe(recipe);
 
         Ingredient ingredient10 = new Ingredient();
         ingredient10.setDescription("Tortilla chips, to serve");
         ingredient10.setAmount(null);
         ingredient10.setUnitOfMeasure(each);
-        ingredient10.setRecipe(recipe);
 
         Category american = new Category();
         american.setCategoryName("American");
@@ -126,16 +116,16 @@ public class DataLoader implements CommandLineRunner {
         veggie.setCategoryName("Vegetarian");
         veggie.getRecipes().add(recipe);
 
-        recipe.getIngredients().add(ingredient1);
-        recipe.getIngredients().add(ingredient2);
-        recipe.getIngredients().add(ingredient3);
-        recipe.getIngredients().add(ingredient4);
-        recipe.getIngredients().add(ingredient5);
-        recipe.getIngredients().add(ingredient6);
-        recipe.getIngredients().add(ingredient7);
-        recipe.getIngredients().add(ingredient8);
-        recipe.getIngredients().add(ingredient9);
-        recipe.getIngredients().add(ingredient10);
+        recipe.addIngredient(ingredient1);
+        recipe.addIngredient(ingredient2);
+        recipe.addIngredient(ingredient3);
+        recipe.addIngredient(ingredient4);
+        recipe.addIngredient(ingredient5);
+        recipe.addIngredient(ingredient6);
+        recipe.addIngredient(ingredient7);
+        recipe.addIngredient(ingredient8);
+        recipe.addIngredient(ingredient9);
+        recipe.addIngredient(ingredient10);
 
         recipe.getCategories().add(mexican);
         recipe.getCategories().add(veggie);
