@@ -5,14 +5,15 @@ import guru.springframework.repositories.CategoryRepository;
 import guru.springframework.repositories.RecipeRepository;
 import guru.springframework.repositories.UnitOfMeasureRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 
 @Slf4j
 @Component
-public class DataLoader implements CommandLineRunner {
+public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
     private final CategoryRepository categoryRepository;
     private final RecipeRepository recipeRepository;
@@ -27,10 +28,12 @@ public class DataLoader implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
+        log.debug("Loading data!");
+        dataLoad();
+    }
 
-        log.debug("In data loader!");
-
+    private void dataLoad(){
         Recipe recipe = new Recipe();
         recipe.setCookTime(10);
         recipe.setDescription("How to Make Perfect Guacamole");
@@ -81,7 +84,7 @@ public class DataLoader implements CommandLineRunner {
         ingredient5.setDescription("serrano chiles, stems and seeds removed, minced");
         ingredient5.setAmount(new BigDecimal(1));
         ingredient5.setUnitOfMeasure(each);
-        
+
         Ingredient ingredient6 = new Ingredient();
         ingredient6.setDescription("cilantro (leaves and tender stems), finely chopped");
         ingredient6.setAmount(new BigDecimal(2));
@@ -96,7 +99,7 @@ public class DataLoader implements CommandLineRunner {
         ingredient8.setDescription("ripe tomato, seeds and pulp removed, chopped");
         ingredient8.setAmount(new BigDecimal("0.5"));
         ingredient8.setUnitOfMeasure(each);
-        
+
         Ingredient ingredient9 = new Ingredient();
         ingredient9.setDescription("Red radishes or jicama, to garnish");
         ingredient9.setAmount(null);
@@ -146,7 +149,6 @@ public class DataLoader implements CommandLineRunner {
         categoryRepository.save(veggie);
         categoryRepository.save(american);
         categoryRepository.save(spanish);
-
 
     }
 }
