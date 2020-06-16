@@ -2,15 +2,18 @@ package guru.springframework.converters;
 
 import guru.springframework.commands.NotesCommand;
 import guru.springframework.domain.Notes;
+import org.springframework.stereotype.Component;
 
-public class NotesConverter {
+@Component
+public class NotesConverter implements BaseConverter<Notes,NotesCommand> {
 
-    public static NotesCommand convertEntityToCommand(Notes notes) {
+    @Override
+    public NotesCommand convertEntityToCommand(Notes entity) {
         return null;
     }
 
-    public static Notes convertCommandToEntity(NotesCommand notesCommand){
+    @Override
+    public Notes convertCommandToEntity(NotesCommand command) {
         return null;
     }
-
 }

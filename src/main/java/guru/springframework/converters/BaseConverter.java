@@ -1,5 +1,8 @@
 package guru.springframework.converters;
 
-public interface BaseConverter<T,D> {
+import guru.springframework.domain.BaseEntity;
 
+public interface BaseConverter<T extends BaseEntity,D> {
+    D convertEntityToCommand(T entity);
+    T convertCommandToEntity(D command);
 }
