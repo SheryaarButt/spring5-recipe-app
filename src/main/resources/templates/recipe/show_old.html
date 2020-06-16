@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+    <!--    Bootstrap CSS CDN-->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+          crossorigin="anonymous" th:href="@{/webjars/bootstrap/4.5.0/css/bootstrap.min.css}">
+
+    <script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
+
+    <!--    Bootstrap JavaScript CDN-->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+            integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+            crossorigin="anonymous" th:src="@{/webjars/bootstrap/4.5.0/js/bootstrap.min.js}"></script>
+</head>
+
+<body>
+<h1>Recipes!</h1>
+<h2 th:text="${recipe.description}">Recipe name</h2>
+<div th:text="${recipe.prepTime}">Prep time: $ minutes</div>
+<div th:text="${recipe.cookTime}">Cook time: $ minutes</div>
+<div th:text="${recipe.servings}">Servings: $</div>
+<div th:text="${recipe.source}">Source: $</div>
+<div th:text="${recipe.url}">URL: $</div>
+<h3>Ingredients</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Amount</th>
+            <th>Unit</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="ingredient : ${recipe.ingredients}">
+            <td th:text="${ingredient.amount}">amount</td>
+            <td th:text="${ingredient.unitOfMeasure.uom}">unit</td>
+            <td th:text="${ingredient.description}">description</td>
+        </tr>
+    </tbody>
+</table>
+<h3>Notes</h3>
+<p th:text="${recipe.notes.recipeNotes}">Recipe Notes</p>
+</body>
+</html>

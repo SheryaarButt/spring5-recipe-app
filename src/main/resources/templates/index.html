@@ -3,36 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <title>Index</title>
+    <!--    Bootstrap CSS CDN-->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+          crossorigin="anonymous" th:href="@{/webjars/bootstrap/4.5.0/css/bootstrap.min.css}">
+
+    <script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
+
+    <!--    Bootstrap JavaScript CDN-->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+            integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+            crossorigin="anonymous" th:src="@{/webjars/bootstrap/4.5.0/js/bootstrap.min.js}"></script>
 </head>
 
 <body>
-<h1>Recipes!</h1>
-<div th:each="recipe : ${recipes}">
-    <h2 th:text="${recipe.description}">Recipe name</h2>
-    <div th:text="${recipe.prepTime}">Prep time: $ minutes</div>
-    <div th:text="${recipe.cookTime}">Cook time: $ minutes</div>
-    <div th:text="${recipe.servings}">Servings: $</div>
-    <div th:text="${recipe.source}">Source: $</div>
-    <div th:text="${recipe.url}">URL: $</div>
-    <h3>Ingredients</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>Amount</th>
-                <th>Unit</th>
-                <th>Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="ingredient : ${recipe.ingredients}">
-                <td th:text="${ingredient.amount}">amount</td>
-                <td th:text="${ingredient.unitOfMeasure.uom}">unit</td>
-                <td th:text="${ingredient.description}">description</td>
-            </tr>
-        </tbody>
-    </table>
-    <h3>Notes</h3>
-    <p th:text="${recipe.notes.recipeNotes}">Recipe Notes</p>
+<div class="container-fluid" style="margin-top: 20px">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="panel panel-primary">
+
+                <div class="panel-heading">
+                    <h1 class="panel-title">My Recipes!</h1>
+                </div>
+                <div class="panel-body">
+                    <div class="table-responsive" th:if="${not #lists.isEmpty(recipes)}">
+                        <table class="table table-hover ">
+                            <thead class="thead-inverse">
+                            <tr>
+                                <th>ID</th>
+                                <th>Description</th>
+                            </tr>
+                            </thead>
+                            <tr th:remove="all">
+                                <td>123</td>
+                                <td>Tasty Goodnees 1</td>
+                                <td><a href="#">View</a></td>
+                            </tr>
+                            <tr th:remove="all">
+                                <td>12333</td>
+                                <td>Tasty Goodnees 2</td>
+                                <td><a href="#">View</a></td>
+                            </tr>
+                            <tr th:each="recipe : ${recipes}">
+                                <td th:text="${recipe.id}">334</td>
+                                <td th:text="${recipe.description}">Tasty Goodnees 3</td>
+                                <td><a href="#" th:href="@{'/recipe/' + ${recipe.id}}">View</a></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>
