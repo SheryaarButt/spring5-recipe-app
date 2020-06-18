@@ -15,7 +15,10 @@ import java.util.Set;
 @Entity
 public class Recipe extends BaseEntity{
 
-    @ManyToMany(mappedBy = "recipes")
+    @ManyToMany
+    @JoinTable(name = "recipe_categories",
+            joinColumns = @JoinColumn(name = "recipe_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Set<Category> categories = new HashSet<>();
 
     private String description;

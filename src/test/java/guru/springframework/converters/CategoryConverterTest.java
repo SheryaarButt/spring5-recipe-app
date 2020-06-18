@@ -27,8 +27,6 @@ public class CategoryConverterTest {
         testRecipeEntity1 = Recipe.builder().id(1L).build();
         testRecipeEntity2 = Recipe.builder().id(2L).build();
         testEntity = Category.builder().id(1L).categoryName("Test").build();
-        testEntity.getRecipes().add(testRecipeEntity1);
-        testEntity.getRecipes().add(testRecipeEntity2);
         testCommand = CategoryCommand.builder().id(1L).categoryName("Test").build();
         categoryConverter = new CategoryConverter();
     }

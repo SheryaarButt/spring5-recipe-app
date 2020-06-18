@@ -116,13 +116,16 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
         Category mexican = new Category();
         mexican.setCategoryName("Mexican");
 
-        mexican.getRecipes().add(recipe);
         Category spanish = new Category();
         spanish.setCategoryName("Spanish");
 
         Category veggie = new Category();
         veggie.setCategoryName("Vegetarian");
-        veggie.getRecipes().add(recipe);
+
+        categoryRepository.save(american);
+        categoryRepository.save(mexican);
+        categoryRepository.save(spanish);
+        categoryRepository.save(veggie);
 
         recipe.addIngredient(ingredient1);
         recipe.addIngredient(ingredient2);
@@ -145,10 +148,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
         recipe.setNotes(notes);
 
         recipeRepository.save(recipe);
-        categoryRepository.save(mexican);
-        categoryRepository.save(veggie);
-        categoryRepository.save(american);
-        categoryRepository.save(spanish);
+
 
     }
 }
