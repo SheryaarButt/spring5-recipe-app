@@ -36,7 +36,6 @@ public class CategoryConverterTest {
         CategoryCommand returnCommand = categoryConverter.convertEntityToCommand(testEntity);
         assertEquals(testEntity.getId(),returnCommand.getId());
         assertEquals(testEntity.getCategoryName(),returnCommand.getCategoryName());
-//        assertTrue(returnCommand.getRecipes().containsAll(testEntity.getRecipes()));
     }
 
     @Test
@@ -44,6 +43,5 @@ public class CategoryConverterTest {
         Category returnEntity = categoryConverter.convertCommandToEntity(testCommand);
         assertEquals(testCommand.getId(),returnEntity.getId());
         assertEquals(testCommand.getCategoryName(),returnEntity.getCategoryName());
-//        assertTrue(returnEntity.getRecipes().containsAll(testCommand.getRecipes()));
     }
 }

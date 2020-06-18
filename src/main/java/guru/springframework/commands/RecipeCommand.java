@@ -1,9 +1,6 @@
 package guru.springframework.commands;
 
-import guru.springframework.domain.Category;
 import guru.springframework.domain.Difficulty;
-import guru.springframework.domain.Ingredient;
-import guru.springframework.domain.Notes;
 import lombok.*;
 
 import java.util.HashSet;
@@ -16,7 +13,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class RecipeCommand {
     private Long id;
-    private Set<Category> categories = new HashSet<>();
+    private Set<CategoryCommand> categories = new HashSet<>();
     private String description;
     private Integer prepTime;
     private Integer cookTime;
@@ -26,8 +23,8 @@ public class RecipeCommand {
     private String directions;
     private Byte[] image;
     private Difficulty difficulty;
-    private Notes notes;
-    private Set<Ingredient> ingredients = new HashSet<>();
+    private NotesCommand notes;
+    private Set<IngredientCommand> ingredients = new HashSet<>();
 
     @Builder
     public RecipeCommand(Long id, String description,
@@ -35,7 +32,7 @@ public class RecipeCommand {
                          Integer servings, String source,
                          String url, String directions,
                          Byte[] image, Difficulty difficulty,
-                         Notes notes) {
+                         NotesCommand notes) {
         this.id = id;
         this.description = description;
         this.prepTime = prepTime;
