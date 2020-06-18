@@ -1,8 +1,6 @@
 package guru.springframework.domain;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -14,6 +12,7 @@ import java.util.Set;
 @Getter
 @Setter
 @ToString(exclude = {"recipes"})
+@NoArgsConstructor
 @Entity
 public class Category extends BaseEntity{
 
@@ -25,6 +24,9 @@ public class Category extends BaseEntity{
 
     private String categoryName;
 
-
-
+    @Builder
+    public Category(Long id, String categoryName) {
+        super(id);
+        this.categoryName = categoryName;
+    }
 }

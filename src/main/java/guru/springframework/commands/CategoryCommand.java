@@ -1,9 +1,6 @@
 package guru.springframework.commands;
 
-import guru.springframework.domain.Recipe;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -11,8 +8,15 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class CategoryCommand {
     private Long id;
-    private Set<Recipe> recipes = new HashSet<>();
+    private Set<RecipeCommand> recipes = new HashSet<>();
     private String categoryName;
+
+    @Builder
+    public CategoryCommand(Long id, String categoryName) {
+        this.id = id;
+        this.categoryName = categoryName;
+    }
 }
