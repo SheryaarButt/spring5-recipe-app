@@ -1,6 +1,9 @@
 package guru.springframework.domain;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,7 +12,6 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-@ToString(exclude = {"recipe"})
 @NoArgsConstructor
 @Entity
 public class Ingredient extends BaseEntity{
@@ -20,15 +22,11 @@ public class Ingredient extends BaseEntity{
     @ManyToOne(fetch = FetchType.EAGER)
     private UnitOfMeasure unitOfMeasure;
 
-    @ManyToOne
-    private Recipe recipe;
-
     @Builder
-    public Ingredient(Long id, String description, BigDecimal amount, UnitOfMeasure unitOfMeasure, Recipe recipe) {
+    public Ingredient(Long id, String description, BigDecimal amount, UnitOfMeasure unitOfMeasure) {
         super(id);
         this.description = description;
         this.amount = amount;
         this.unitOfMeasure = unitOfMeasure;
-        this.recipe = recipe;
     }
 }

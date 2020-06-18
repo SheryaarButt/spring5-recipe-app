@@ -17,12 +17,10 @@ public class RecipeConverterTest {
 
     Notes testNotes;
 
-
     @Before
     public void setUp() throws Exception {
-
         testImage = new Byte[5];
-        testNotes = Notes.builder().id(1L).recipeNotes("TestNotes").recipe(testEntity).build();
+        testNotes = Notes.builder().id(1L).recipeNotes("TestNotes").build();
         recipeConverter = new RecipeConverter();
     }
 

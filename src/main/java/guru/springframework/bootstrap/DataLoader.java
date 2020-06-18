@@ -143,12 +143,9 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
         Notes notes = new Notes();
         notes.setRecipeNotes("Be careful handling chiles if using. Wash your hands thoroughly after handling and do not touch your eyes or the area near your eyes with your hands for several hours.");
-        notes.setRecipe(recipe);
 
         recipe.setNotes(notes);
 
         recipeRepository.save(recipe);
-
-
     }
 }

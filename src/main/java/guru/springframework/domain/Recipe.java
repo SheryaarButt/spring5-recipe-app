@@ -39,10 +39,11 @@ public class Recipe extends BaseEntity{
     private Difficulty difficulty;
 
     //Notes is owner - associated notes will be deleted if parent recipe is deleted
-    @OneToOne(cascade = CascadeType.ALL, mappedBy="recipe")
+    @OneToOne(cascade = CascadeType.ALL)
     private Notes notes;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy="recipe")
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "recipe_id")
     private Set<Ingredient> ingredients = new HashSet<>();
 
     @Builder
@@ -64,12 +65,10 @@ public class Recipe extends BaseEntity{
     }
 
     public void setNotes(Notes notes) {
-        notes.setRecipe(this);
         this.notes = notes;
     }
 
     public void addIngredient(Ingredient ingredient){
-        ingredient.setRecipe(this);
         ingredients.add(ingredient);
     }
 
