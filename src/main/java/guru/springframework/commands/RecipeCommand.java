@@ -6,7 +6,6 @@ import lombok.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@Builder
 @Getter
 @Setter
 @NoArgsConstructor
@@ -45,4 +44,13 @@ public class RecipeCommand {
         this.difficulty = difficulty;
         this.notes = notes;
     }
+
+    public void addCategory(CategoryCommand category){
+        categories.add(category);
+    }
+
+    public void addIngredient(IngredientCommand ingredient){
+        ingredients.add(ingredient);
+    }
+
 }

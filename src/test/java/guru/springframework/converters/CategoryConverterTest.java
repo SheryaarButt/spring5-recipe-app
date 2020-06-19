@@ -1,9 +1,7 @@
 package guru.springframework.converters;
 
 import guru.springframework.commands.CategoryCommand;
-import guru.springframework.commands.RecipeCommand;
 import guru.springframework.domain.Category;
-import guru.springframework.domain.Recipe;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -14,20 +12,12 @@ public class CategoryConverterTest {
     Category testEntity;
     CategoryCommand testCommand;
 
-    Recipe testRecipeEntity1;
-    Recipe testRecipeEntity2;
-
-    RecipeCommand testRecipeCommand1;
-    RecipeCommand testRecipeCommand2;
-
     CategoryConverter categoryConverter;
 
     @Before
     public void setUp() throws Exception {
-        testRecipeEntity1 = Recipe.builder().id(1L).build();
-        testRecipeEntity2 = Recipe.builder().id(2L).build();
-        testEntity = Category.builder().id(1L).categoryName("Test").build();
-        testCommand = CategoryCommand.builder().id(1L).categoryName("Test").build();
+        testEntity = Category.builder().id(1L).categoryName("TestEntity").build();
+        testCommand = CategoryCommand.builder().id(2L).categoryName("TestCommand").build();
         categoryConverter = new CategoryConverter();
     }
 

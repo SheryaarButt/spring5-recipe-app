@@ -72,4 +72,8 @@ public class Recipe extends BaseEntity{
         ingredients.add(ingredient);
     }
 
+    public void addCategory(Category category){
+        categories.add(category);
+    }
+
 }
