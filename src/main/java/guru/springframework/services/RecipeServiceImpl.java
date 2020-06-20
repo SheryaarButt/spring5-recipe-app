@@ -23,24 +23,27 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Set<Recipe> getRecipes() {
+    public Set<RecipeCommand> getRecipes() {
         log.debug("I'm in the service");
 
-        Set<Recipe> foundRecipes = new HashSet<>();
-        recipeRepository.findAll().forEach(foundRecipes::add);
+        Set<RecipeCommand> foundRecipes = new HashSet<>();
+        recipeRepository.findAll().forEach(recipeEntity ->
+            foundRecipes.add(recipeConverter.convertEntityToCommand(recipeEntity))
+        );
         return foundRecipes;
     }
 
     @Override
-    public Recipe getRecipe(Long id) {
-        return recipeRepository.findById(id).orElse(null);
+    public RecipeCommand getRecipe(Long id) {
+        Recipe foundRecipe = recipeRepository.findById(id).orElse(null);
+        return recipeConverter.convertEntityToCommand(foundRecipe);
     }
 
     @Override
-    public Recipe saveRecipe(RecipeCommand recipe) {
+    public RecipeCommand saveRecipe(RecipeCommand recipe) {
         Recipe recipeEntity = recipeConverter.convertCommandToEntity(recipe);
         Recipe savedRecipe = recipeRepository.save(recipeEntity);
         log.debug("Added recipe ID: " + savedRecipe.getId());
-        return savedRecipe;
+        return recipeConverter.convertEntityToCommand(savedRecipe);
     }
 }

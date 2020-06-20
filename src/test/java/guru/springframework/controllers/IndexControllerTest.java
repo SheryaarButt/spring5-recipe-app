@@ -1,6 +1,6 @@
 package guru.springframework.controllers;
 
-import guru.springframework.domain.Recipe;
+import guru.springframework.commands.RecipeCommand;
 import guru.springframework.services.RecipeService;
 import org.junit.Before;
 import org.junit.Test;
@@ -52,11 +52,9 @@ public class IndexControllerTest {
     @Test
     public void index() {
 
-        Set<Recipe> recipes = new HashSet<>();
-        Recipe recipe1 = new Recipe();
-        Recipe recipe2 = new Recipe();
-        recipe1.setDescription("Recipe1");
-        recipe2.setDescription("Recipe2");
+        Set<RecipeCommand> recipes = new HashSet<>();
+        RecipeCommand recipe1 = RecipeCommand.builder().description("Recipe1").build();
+        RecipeCommand recipe2 = RecipeCommand.builder().description("Recipe2").build();
         recipes.add(recipe1);
         recipes.add(recipe2);
 
@@ -68,7 +66,6 @@ public class IndexControllerTest {
 
         verify(recipeService,times(1)).getRecipes();
         verify(model,times(1)).addAttribute(eq("recipes"),eq(recipes));
-
 
     }
 

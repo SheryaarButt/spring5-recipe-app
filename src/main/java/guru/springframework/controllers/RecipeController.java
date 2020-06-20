@@ -1,19 +1,24 @@
 package guru.springframework.controllers;
 
-import guru.springframework.domain.Recipe;
+import guru.springframework.commands.RecipeCommand;
+import guru.springframework.converters.RecipeConverter;
 import guru.springframework.services.RecipeService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+@Slf4j
 @Controller
 @RequestMapping("/recipe")
 public class RecipeController {
 
     private final RecipeService recipeService;
 
-    public RecipeController(RecipeService recipeService) {
+    public RecipeController(RecipeService recipeService, RecipeConverter recipeConverter) {
         this.recipeService = recipeService;
     }
 
@@ -21,12 +26,12 @@ public class RecipeController {
     public String show(@PathVariable String id, Model model){
 
         long parsedId;
-        Recipe returnRecipe;
+        RecipeCommand returnRecipe;
 
         try{
             parsedId = Long.parseLong(id);
         } catch(NumberFormatException e){
-            System.out.println("Invalid ID: " + e.getMessage());
+            log.debug("Incorrect format for id: " + e.getMessage());
             return "recipe/error";
         }
 
@@ -36,7 +41,37 @@ public class RecipeController {
         } else {
             return "recipe/error";
         }
+    }
 
+    @RequestMapping("/new")
+    public String newRecipe(Model model){
+        model.addAttribute("recipe",new RecipeCommand());
+        return "recipe/recipeform";
+    }
+
+    @RequestMapping("/update/{id}")
+    public String updateRecipe(@PathVariable String id, Model model){
+
+        Long formattedId;
+        try{
+            formattedId = Long.parseLong(id);
+        } catch(NumberFormatException e){
+            log.debug("Incorrect format for id: " + e.getMessage());
+            return "recipe/error";
+        }
+        RecipeCommand foundRecipe = recipeService.getRecipe(formattedId);
+        if(foundRecipe == null){
+            log.debug("Recipe not found");
+            return "recipe/error";
+        }
+        model.addAttribute("recipe",foundRecipe);
+        return "recipe/recipeform";
+    }
+
+    @PostMapping
+    public String saveOrUpdate(@ModelAttribute RecipeCommand command){
+        RecipeCommand savedRecipe = recipeService.saveRecipe(command);
+        return "redirect:/recipe/" + savedRecipe.getId();
     }
 
 }

@@ -93,7 +93,7 @@ public class RecipeServiceImplIT {
 
     @Test
     public void saveRecipe() {
-        Recipe returnRecipe = recipeService.saveRecipe(testRecipe);
+        RecipeCommand returnRecipe = recipeService.saveRecipe(testRecipe);
         Long savedId = returnRecipe.getId();
         Recipe foundRecipe = recipeRepository.findById(savedId).get();
         assertEquals(savedId,foundRecipe.getId());
