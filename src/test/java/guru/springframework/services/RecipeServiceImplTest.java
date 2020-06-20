@@ -27,9 +27,18 @@ public class RecipeServiceImplTest {
 
     RecipeService recipeService;
 
+    Recipe testRecipe2;
+    Recipe testRecipe3;
+
     List<Recipe> testRecipes;
 
+    RecipeCommand testRecipeCommand1;
+    RecipeCommand testRecipeCommand2;
+    RecipeCommand testRecipeCommand3;
+
     Recipe testRecipe;
+
+
 
     @Before
     public void setUp() throws Exception {
@@ -37,27 +46,39 @@ public class RecipeServiceImplTest {
         recipeService = new RecipeServiceImpl(recipeRepository,recipeConverter);
 
         testRecipe = Recipe.builder().id(1L).build();
+        testRecipe2 = Recipe.builder().id(2L).build();
+        testRecipe3 = Recipe.builder().id(3L).build();
+
         testRecipes = new ArrayList<>();
-        testRecipes.add(Recipe.builder().id(1L).build());
-        testRecipes.add(Recipe.builder().id(2L).build());
-        testRecipes.add(Recipe.builder().id(3L).build());
+        testRecipes.add(testRecipe);
+        testRecipes.add(testRecipe2);
+        testRecipes.add(testRecipe3);
+
+        testRecipeCommand1 = RecipeCommand.builder().id(1L).build();
+        testRecipeCommand2 = RecipeCommand.builder().id(1L).build();
+        testRecipeCommand3 = RecipeCommand.builder().id(1L).build();
 
     }
 
     @Test
     public void getRecipes() {
         when(recipeRepository.findAll()).thenReturn(testRecipes);
+        when(recipeConverter.convertEntityToCommand(testRecipe)).thenReturn(testRecipeCommand1);
+        when(recipeConverter.convertEntityToCommand(testRecipe2)).thenReturn(testRecipeCommand2);
+        when(recipeConverter.convertEntityToCommand(testRecipe3)).thenReturn(testRecipeCommand3);
 
         Set<RecipeCommand> returnSet = recipeService.getRecipes();
 
         assertEquals(returnSet.size(),testRecipes.size());
 
         verify(recipeRepository,times(1)).findAll();
+        verify(recipeConverter,times(3)).convertEntityToCommand(any());
     }
 
     @Test
     public void getRecipeExists() {
         when(recipeRepository.findById(anyLong())).thenReturn(Optional.of(testRecipe));
+        when(recipeConverter.convertEntityToCommand(testRecipe)).thenReturn(testRecipeCommand1);
 
         assertEquals(testRecipe.getId(),recipeService.getRecipe(1L).getId());
 
@@ -67,10 +88,10 @@ public class RecipeServiceImplTest {
     @Test
     public void getRecipeNotExists() {
         when(recipeRepository.findById(anyLong())).thenReturn(Optional.empty());
+        when(recipeConverter.convertEntityToCommand(null)).thenReturn(null);
 
         assertNull(recipeService.getRecipe(1L));
 
         verify(recipeRepository,times(1)).findById(anyLong());
-
     }
 }
