@@ -5,6 +5,7 @@ import guru.springframework.commands.UnitOfMeasureCommand;
 import guru.springframework.domain.Ingredient;
 import guru.springframework.domain.UnitOfMeasure;
 import org.springframework.beans.BeanUtils;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -16,8 +17,12 @@ public class IngredientConverter implements BaseConverter<Ingredient, Ingredient
         this.unitOfMeasureConverter = unitOfMeasureConverter;
     }
 
+    @Nullable
     @Override
     public IngredientCommand convertEntityToCommand(Ingredient entity) {
+        if(entity == null){
+            return null;
+        }
         IngredientCommand returnCommand = new IngredientCommand();
         BeanUtils.copyProperties(entity,returnCommand,"unitOfMeasure");
 
@@ -30,8 +35,12 @@ public class IngredientConverter implements BaseConverter<Ingredient, Ingredient
         return returnCommand;
     }
 
+    @Nullable
     @Override
     public Ingredient convertCommandToEntity(IngredientCommand command) {
+        if(command == null){
+            return null;
+        }
         Ingredient returnEntity = new Ingredient();
         BeanUtils.copyProperties(command,returnEntity,"unitOfMeasure");
 

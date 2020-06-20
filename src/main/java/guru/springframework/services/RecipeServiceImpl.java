@@ -1,5 +1,7 @@
 package guru.springframework.services;
 
+import guru.springframework.commands.RecipeCommand;
+import guru.springframework.converters.RecipeConverter;
 import guru.springframework.domain.Recipe;
 import guru.springframework.repositories.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -13,9 +15,11 @@ import java.util.Set;
 public class RecipeServiceImpl implements RecipeService {
 
     private final RecipeRepository recipeRepository;
+    private final RecipeConverter recipeConverter;
 
-    public RecipeServiceImpl(RecipeRepository recipeRepository) {
+    public RecipeServiceImpl(RecipeRepository recipeRepository, RecipeConverter recipeConverter) {
         this.recipeRepository = recipeRepository;
+        this.recipeConverter = recipeConverter;
     }
 
     @Override
@@ -30,5 +34,13 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public Recipe getRecipe(Long id) {
         return recipeRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public Recipe saveRecipe(RecipeCommand recipe) {
+        Recipe recipeEntity = recipeConverter.convertCommandToEntity(recipe);
+        Recipe savedRecipe = recipeRepository.save(recipeEntity);
+        log.debug("Added recipe ID: " + savedRecipe.getId());
+        return savedRecipe;
     }
 }

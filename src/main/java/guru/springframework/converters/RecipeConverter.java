@@ -9,6 +9,7 @@ import guru.springframework.domain.Ingredient;
 import guru.springframework.domain.Notes;
 import guru.springframework.domain.Recipe;
 import org.springframework.beans.BeanUtils;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 import java.util.Set;
@@ -26,8 +27,12 @@ public class RecipeConverter implements BaseConverter<Recipe, RecipeCommand> {
         this.notesConverter = notesConverter;
     }
 
+    @Nullable
     @Override
     public RecipeCommand convertEntityToCommand(Recipe entity) {
+        if(entity == null){
+            return null;
+        }
         RecipeCommand returnCommand = new RecipeCommand();
         BeanUtils.copyProperties(entity,returnCommand,"notes","categories","ingredients");
 
@@ -53,8 +58,12 @@ public class RecipeConverter implements BaseConverter<Recipe, RecipeCommand> {
         return returnCommand;
     }
 
+    @Nullable
     @Override
     public Recipe convertCommandToEntity(RecipeCommand command) {
+        if(command == null){
+            return null;
+        }
         Recipe returnEntity = new Recipe();
         BeanUtils.copyProperties(command,returnEntity,"notes","categories","ingredients");
 
