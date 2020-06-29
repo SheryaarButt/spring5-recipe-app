@@ -71,4 +71,18 @@ public class RecipeController {
         return "redirect:/recipe/" + savedRecipe.getId() + "/show";
     }
 
+    @GetMapping("/{id}/delete")
+    public String delete(@PathVariable String id){
+        Long formattedId;
+        try{
+            formattedId = Long.parseLong(id);
+        } catch(NumberFormatException e){
+            log.debug("Incorrect format for id: " + e.getMessage());
+            return "recipe/error";
+        }
+        log.debug("Deleting recipe: " + formattedId);
+        recipeService.deleteRecipe(formattedId);
+        return "redirect:/";
+    }
+
 }

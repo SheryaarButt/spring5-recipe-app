@@ -162,6 +162,17 @@ public class RecipeControllerTest {
         } catch(Exception e){
             fail(e.getMessage());
         }
+    }
 
+    @Test
+    public void deleteRecipe(){
+        try{
+            mockMvc.perform(MockMvcRequestBuilders.get("/recipe/1/delete"))
+                    .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+                    .andExpect(MockMvcResultMatchers.view().name("redirect:/"));
+        } catch(Exception e){
+            fail(e.getMessage());
+        }
+        verify(recipeService,times(1)).deleteRecipe(1L);
     }
 }

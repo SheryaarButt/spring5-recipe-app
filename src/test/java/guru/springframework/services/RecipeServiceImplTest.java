@@ -94,4 +94,11 @@ public class RecipeServiceImplTest {
 
         verify(recipeRepository,times(1)).findById(anyLong());
     }
+
+    @Test
+    public void deleteRecipe(){
+        recipeService.deleteRecipe(1L);
+        verify(recipeRepository,times(1)).deleteById(1L);
+    }
+
 }
