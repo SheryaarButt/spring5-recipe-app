@@ -42,7 +42,7 @@ public class Recipe extends BaseEntity{
     @OneToOne(cascade = CascadeType.ALL)
     private Notes notes;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "recipe_id")
     private Set<Ingredient> ingredients = new HashSet<>();
 
