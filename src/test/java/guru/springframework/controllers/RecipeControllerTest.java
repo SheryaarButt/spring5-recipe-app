@@ -75,9 +75,7 @@ public class RecipeControllerTest {
 
         try{
             mockMvc.perform(MockMvcRequestBuilders.get("/recipe/1sasd/show"))
-                    .andExpect(MockMvcResultMatchers.status().isOk())
-                    .andExpect(MockMvcResultMatchers.view().name("recipe/error"))
-                    .andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("recipe"));
+                    .andExpect(MockMvcResultMatchers.status().isNotFound());
         } catch(Exception e){
             fail(e.getMessage());
         }
@@ -106,9 +104,20 @@ public class RecipeControllerTest {
 
         try{
             mockMvc.perform(MockMvcRequestBuilders.get("/recipe/92sfa1/update"))
-                    .andExpect(MockMvcResultMatchers.status().isOk())
-                    .andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("recipe"))
-                    .andExpect(MockMvcResultMatchers.view().name("recipe/error"));
+                    .andExpect(MockMvcResultMatchers.status().isNotFound());
+        } catch (Exception e){
+            fail(e.getMessage());
+        }
+
+        verify(recipeService,never()).getRecipe(any());
+    }
+
+    @Test
+    public void updateIdInvalidFormat2(){
+
+        try{
+            mockMvc.perform(MockMvcRequestBuilders.get("/recipe/01/update"))
+                    .andExpect(MockMvcResultMatchers.status().isNotFound());
         } catch (Exception e){
             fail(e.getMessage());
         }

@@ -6,4 +6,5 @@ import java.util.Set;
 
 public interface IngredientService {
     Set<IngredientCommand> getIngredients();
+    void deleteIngredient(Long id);
 }

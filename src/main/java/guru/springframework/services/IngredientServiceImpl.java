@@ -27,4 +27,9 @@ public class IngredientServiceImpl implements IngredientService {
         });
         return returnIngredients;
     }
+
+    @Override
+    public void deleteIngredient(Long id){
+        ingredientRepository.deleteById(id);
+    }
 }

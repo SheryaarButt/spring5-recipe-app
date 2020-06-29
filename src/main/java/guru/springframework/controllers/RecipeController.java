@@ -19,20 +19,11 @@ public class RecipeController {
         this.recipeService = recipeService;
     }
 
-    @GetMapping("/{id}/show")
+    @GetMapping("/{id:[1-9]\\d*}/show")
     public String show(@PathVariable String id, Model model){
 
-        long parsedId;
         RecipeCommand returnRecipe;
-
-        try{
-            parsedId = Long.parseLong(id);
-        } catch(NumberFormatException e){
-            log.debug("Incorrect format for id: " + e.getMessage());
-            return "recipe/error";
-        }
-
-        if((returnRecipe = recipeService.getRecipe(parsedId)) != null){
+        if((returnRecipe = recipeService.getRecipe(Long.parseLong(id))) != null){
             model.addAttribute("recipe",returnRecipe);
             return "recipe/show";
         } else {
@@ -46,17 +37,10 @@ public class RecipeController {
         return "recipe/recipeform";
     }
 
-    @GetMapping("/{id}/update")
+    @GetMapping("/{id:[1-9]\\d*}/update")
     public String updateRecipe(@PathVariable String id, Model model){
 
-        Long formattedId;
-        try{
-            formattedId = Long.parseLong(id);
-        } catch(NumberFormatException e){
-            log.debug("Incorrect format for id: " + e.getMessage());
-            return "recipe/error";
-        }
-        RecipeCommand foundRecipe = recipeService.getRecipe(formattedId);
+        RecipeCommand foundRecipe = recipeService.getRecipe(Long.parseLong(id));
         if(foundRecipe == null){
             log.debug("Recipe not found");
             return "recipe/error";
@@ -71,17 +55,10 @@ public class RecipeController {
         return "redirect:/recipe/" + savedRecipe.getId() + "/show";
     }
 
-    @GetMapping("/{id}/delete")
+    @GetMapping("/{id:[1-9]\\d*}/delete")
     public String delete(@PathVariable String id){
-        Long formattedId;
-        try{
-            formattedId = Long.parseLong(id);
-        } catch(NumberFormatException e){
-            log.debug("Incorrect format for id: " + e.getMessage());
-            return "recipe/error";
-        }
-        log.debug("Deleting recipe: " + formattedId);
-        recipeService.deleteRecipe(formattedId);
+        log.debug("Deleting recipe: " + id);
+        recipeService.deleteRecipe(Long.parseLong(id));
         return "redirect:/";
     }
 

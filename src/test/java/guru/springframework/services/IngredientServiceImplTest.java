@@ -69,4 +69,10 @@ public class IngredientServiceImplTest {
         verify(ingredientRepository,times(1)).findAll();
         verify(ingredientConverter,times(3)).convertEntityToCommand(any());
     }
+
+    @Test
+    public void deleteIngredient(){
+        ingredientService.deleteIngredient(1L);
+        verify(ingredientRepository,times(1)).deleteById(1L);
+    }
 }
