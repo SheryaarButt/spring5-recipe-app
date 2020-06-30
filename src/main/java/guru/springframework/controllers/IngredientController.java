@@ -1,12 +1,15 @@
 package guru.springframework.controllers;
 
+import guru.springframework.commands.IngredientCommand;
 import guru.springframework.services.IngredientService;
 import guru.springframework.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Slf4j
 @Controller
@@ -38,9 +41,10 @@ public class IngredientController {
         return "recipe/ingredient/show";
     }
 
-    @GetMapping("/recipe/{recipeId:[1-9]\\d*}/ingredient/add")
-    public String addIngredientForm(@PathVariable String recipeId,Model model){
+    @GetMapping("/recipe/{recipeId:[1-9]\\d*}/ingredient/new")
+    public String newIngredientForm(@PathVariable String recipeId,Model model){
         model.addAttribute("recipeId",recipeId);
+        model.addAttribute("ingredient", new IngredientCommand());
         return "recipe/ingredient/ingredientform";
     }
 
@@ -49,6 +53,11 @@ public class IngredientController {
         model.addAttribute("recipeId",recipeId);
         model.addAttribute("ingredient",ingredientService.getIngredient(Long.parseLong(ingredientId)));
         return "recipe/ingredient/ingredientform";
+    }
+
+    @PostMapping("/recipe/{recipeId:[1-9]\\d*}/ingredient")
+    public String addOrUpdateIngredient(@ModelAttribute IngredientCommand ingredient, @PathVariable String recipeId){
+        return null;
     }
 
 }

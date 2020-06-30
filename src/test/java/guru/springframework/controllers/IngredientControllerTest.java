@@ -85,12 +85,12 @@ public class IngredientControllerTest {
     }
 
     @Test
-    public void addIngredientForm() {
+    public void newIngredientForm() {
         try{
-            mockMvc.perform(get("/recipe/1/ingredient/add"))
+            mockMvc.perform(get("/recipe/1/ingredient/new"))
                     .andExpect(view().name("recipe/ingredient/ingredientform"))
                     .andExpect(status().isOk())
-                    .andExpect(model().attributeDoesNotExist("ingredient"))
+                    .andExpect(model().attributeExists("ingredient"))
                     .andExpect(model().attribute("recipeId","1"));
         }catch(Exception e){
             fail(e.getMessage());
@@ -110,5 +110,10 @@ public class IngredientControllerTest {
         }catch(Exception e){
             fail(e.getMessage());
         }
+    }
+
+    @Test
+    public void addOrUpdateIngredient() {
+
     }
 }

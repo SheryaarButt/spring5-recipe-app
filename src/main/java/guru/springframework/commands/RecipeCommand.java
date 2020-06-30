@@ -2,10 +2,13 @@ package guru.springframework.commands;
 
 import guru.springframework.domain.Difficulty;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 
 import java.util.HashSet;
 import java.util.Set;
 
+@Slf4j
 @Getter
 @Setter
 @NoArgsConstructor
@@ -53,4 +56,14 @@ public class RecipeCommand {
         ingredients.add(ingredient);
     }
 
+    public void updateIngredient(Long id, IngredientCommand ingredient){
+        ingredients.stream().filter(
+            recipeIngredient -> recipeIngredient.getId().equals(id)
+        ).findFirst()
+        .ifPresentOrElse(recipeIngredient -> {
+            BeanUtils.copyProperties(ingredient,recipeIngredient,"id");
+        },() -> {
+            log.debug("Ingredient not found.");
+        });
+    }
 }
