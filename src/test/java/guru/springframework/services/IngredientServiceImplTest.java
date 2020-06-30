@@ -11,9 +11,10 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 public class IngredientServiceImplTest {
@@ -50,8 +51,8 @@ public class IngredientServiceImplTest {
         testIngredients.add(testIngredient3);
 
         testEntity1 = Ingredient.builder().id(1L).build();
-        testEntity1 = Ingredient.builder().id(2L).build();
-        testEntity1 = Ingredient.builder().id(3L).build();
+        testEntity2 = Ingredient.builder().id(2L).build();
+        testEntity3 = Ingredient.builder().id(3L).build();
         testEntities = IterableUtil.iterable(testEntity1,testEntity2,testEntity3);
 
         ingredientService = new IngredientServiceImpl(ingredientConverter,ingredientRepository);
@@ -61,8 +62,8 @@ public class IngredientServiceImplTest {
     public void getIngredients() {
         when(ingredientRepository.findAll()).thenReturn(testEntities);
         when(ingredientConverter.convertEntityToCommand(testEntity1)).thenReturn(testIngredient1);
-        when(ingredientConverter.convertEntityToCommand(testEntity2)).thenReturn(testIngredient1);
-        when(ingredientConverter.convertEntityToCommand(testEntity3)).thenReturn(testIngredient1);
+        when(ingredientConverter.convertEntityToCommand(testEntity2)).thenReturn(testIngredient2);
+        when(ingredientConverter.convertEntityToCommand(testEntity3)).thenReturn(testIngredient3);
 
         assertTrue(testIngredients.containsAll(ingredientService.getIngredients()));
 
@@ -75,4 +76,27 @@ public class IngredientServiceImplTest {
         ingredientService.deleteIngredient(1L);
         verify(ingredientRepository,times(1)).deleteById(1L);
     }
+
+    @Test
+    public void getIngredient() {
+        when(ingredientRepository.findById(2L)).thenReturn(Optional.of(testEntity2));
+        when(ingredientConverter.convertEntityToCommand(testEntity2)).thenReturn(testIngredient2);
+
+        assertEquals(testIngredient2,ingredientService.getIngredient(2L));
+
+        verify(ingredientRepository,times(1)).findById(2L);
+        verify(ingredientConverter,times(1)).convertEntityToCommand(testEntity2);
+    }
+
+    @Test
+    public void getIngredientNotFound() {
+        when(ingredientRepository.findById(4L)).thenReturn(Optional.empty());
+        when(ingredientConverter.convertEntityToCommand(null)).thenReturn(null);
+
+        assertNull(ingredientService.getIngredient(4L));
+
+        verify(ingredientRepository,times(1)).findById(4L);
+        verify(ingredientConverter,times(1)).convertEntityToCommand(null);
+    }
+
 }

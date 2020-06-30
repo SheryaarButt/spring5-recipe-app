@@ -32,6 +32,23 @@ public class IngredientController {
         return "redirect:/recipe/" + recipeId + "/ingredients";
     }
 
+    @GetMapping("/recipe/{recipeId:[1-9]\\d*}/ingredient/{ingredientId:[1-9]\\d*}/show")
+    public String show(@PathVariable String recipeId,@PathVariable String ingredientId, Model model){
+        model.addAttribute("ingredient",ingredientService.getIngredient(Long.parseLong(ingredientId)));
+        return "recipe/ingredient/show";
+    }
 
+    @GetMapping("/recipe/{recipeId:[1-9]\\d*}/ingredient/add")
+    public String addIngredientForm(@PathVariable String recipeId,Model model){
+        model.addAttribute("recipeId",recipeId);
+        return "recipe/ingredient/ingredientform";
+    }
+
+    @GetMapping("/recipe/{recipeId:[1-9]\\d*}/ingredient/{ingredientId:[1-9]\\d*}/update")
+    public String updateIngredientForm(@PathVariable String recipeId,@PathVariable String ingredientId,Model model){
+        model.addAttribute("recipeId",recipeId);
+        model.addAttribute("ingredient",ingredientService.getIngredient(Long.parseLong(ingredientId)));
+        return "recipe/ingredient/ingredientform";
+    }
 
 }

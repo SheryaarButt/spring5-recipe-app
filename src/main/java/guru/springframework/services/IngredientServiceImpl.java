@@ -32,4 +32,9 @@ public class IngredientServiceImpl implements IngredientService {
     public void deleteIngredient(Long id){
         ingredientRepository.deleteById(id);
     }
+
+    @Override
+    public IngredientCommand getIngredient(Long id) {
+        return ingredientConverter.convertEntityToCommand(ingredientRepository.findById(id).orElse(null));
+    }
 }
