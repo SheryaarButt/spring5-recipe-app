@@ -7,7 +7,12 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UnitOfMeasureCommand {
+public class UnitOfMeasureCommand implements Comparable<UnitOfMeasureCommand> {
     private Long id;
     private String uom;
+
+    @Override
+    public int compareTo(UnitOfMeasureCommand unitOfMeasureCommand) {
+        return uom.compareToIgnoreCase(unitOfMeasureCommand.uom);
+    }
 }

@@ -91,7 +91,8 @@ public class IngredientControllerTest {
                     .andExpect(view().name("recipe/ingredient/ingredientform"))
                     .andExpect(status().isOk())
                     .andExpect(model().attributeExists("ingredient"))
-                    .andExpect(model().attribute("recipeId","1"));
+                    .andExpect(model().attribute("recipeId","1"))
+                    .andExpect(model().attributeExists("uomList"));
         }catch(Exception e){
             fail(e.getMessage());
         }
@@ -106,7 +107,8 @@ public class IngredientControllerTest {
                     .andExpect(view().name("recipe/ingredient/ingredientform"))
                     .andExpect(status().isOk())
                     .andExpect(model().attribute("ingredient",testIngredient))
-                    .andExpect(model().attribute("recipeId","1"));
+                    .andExpect(model().attribute("recipeId","1"))
+                    .andExpect(model().attributeExists("uomList"));
         }catch(Exception e){
             fail(e.getMessage());
         }
