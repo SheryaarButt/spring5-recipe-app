@@ -9,12 +9,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class IngredientControllerTest {
@@ -118,6 +120,13 @@ public class IngredientControllerTest {
 
     @Test
     public void addOrUpdateIngredient() {
-
+        try{
+            mockMvc.perform(post("/recipe/1/ingredient").contentType(MediaType.APPLICATION_FORM_URLENCODED))
+                    .andExpect(status().is3xxRedirection())
+                    .andExpect(view().name("redirect:/recipe/1/ingredients"));
+        } catch(Exception e){
+            fail(e.getMessage());
+        }
+        verify(recipeService,times(1)).saveIngredient(any(),any());
     }
 }

@@ -1,5 +1,6 @@
 package guru.springframework.services;
 
+import guru.springframework.commands.IngredientCommand;
 import guru.springframework.commands.RecipeCommand;
 import guru.springframework.converters.RecipeConverter;
 import guru.springframework.domain.Recipe;
@@ -17,10 +18,13 @@ public class RecipeServiceImpl implements RecipeService {
 
     private final RecipeRepository recipeRepository;
     private final RecipeConverter recipeConverter;
+    private final IngredientService ingredientService;
 
-    public RecipeServiceImpl(RecipeRepository recipeRepository, RecipeConverter recipeConverter) {
+    public RecipeServiceImpl(RecipeRepository recipeRepository, RecipeConverter recipeConverter,
+                             IngredientService ingredientService) {
         this.recipeRepository = recipeRepository;
         this.recipeConverter = recipeConverter;
+        this.ingredientService = ingredientService;
     }
 
     @Override
@@ -56,4 +60,16 @@ public class RecipeServiceImpl implements RecipeService {
     public void deleteRecipe(Long id){
         recipeRepository.deleteById(id);
     }
+
+    @Override
+    @Transactional
+    public RecipeCommand saveIngredient(Long recipeId, IngredientCommand ingredient) {
+        RecipeCommand foundRecipe = getRecipe(recipeId);
+        if (foundRecipe != null) {
+            foundRecipe.updateIngredient(ingredient.getId(), ingredient);
+            return saveRecipe(foundRecipe);
+        }
+        return null;
+    }
+
 }

@@ -57,6 +57,10 @@ public class RecipeCommand {
     }
 
     public void updateIngredient(Long id, IngredientCommand ingredient){
+        if(id == null){
+            addIngredient(ingredient);
+            return;
+        }
         ingredients.stream().filter(
             recipeIngredient -> recipeIngredient.getId().equals(id)
         ).findFirst()

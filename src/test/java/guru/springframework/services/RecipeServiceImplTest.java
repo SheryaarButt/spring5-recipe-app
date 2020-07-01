@@ -1,5 +1,6 @@
 package guru.springframework.services;
 
+import guru.springframework.commands.IngredientCommand;
 import guru.springframework.commands.RecipeCommand;
 import guru.springframework.converters.RecipeConverter;
 import guru.springframework.domain.Recipe;
@@ -24,6 +25,8 @@ public class RecipeServiceImplTest {
     RecipeRepository recipeRepository;
     @Mock
     RecipeConverter recipeConverter;
+    @Mock
+    IngredientService ingredientService;
 
     RecipeService recipeService;
 
@@ -33,17 +36,24 @@ public class RecipeServiceImplTest {
     List<Recipe> testRecipes;
 
     RecipeCommand testRecipeCommand1;
+    RecipeCommand testRecipeCommand1PostUpdate;
+    RecipeCommand testRecipeCommand1PostAdd;
     RecipeCommand testRecipeCommand2;
     RecipeCommand testRecipeCommand3;
 
     Recipe testRecipe;
 
+    IngredientCommand testIngredient1;
+    IngredientCommand testIngredient2;
+    IngredientCommand testIngredient3;
 
+    IngredientCommand testIngredientAdd;
+    IngredientCommand testIngredient2Update;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        recipeService = new RecipeServiceImpl(recipeRepository,recipeConverter);
+        recipeService = new RecipeServiceImpl(recipeRepository,recipeConverter,ingredientService);
 
         testRecipe = Recipe.builder().id(1L).build();
         testRecipe2 = Recipe.builder().id(2L).build();
@@ -55,8 +65,27 @@ public class RecipeServiceImplTest {
         testRecipes.add(testRecipe3);
 
         testRecipeCommand1 = RecipeCommand.builder().id(1L).build();
-        testRecipeCommand2 = RecipeCommand.builder().id(1L).build();
-        testRecipeCommand3 = RecipeCommand.builder().id(1L).build();
+        testRecipeCommand2 = RecipeCommand.builder().id(2L).build();
+        testRecipeCommand3 = RecipeCommand.builder().id(3L).build();
+
+        testIngredient1 = IngredientCommand.builder().id(1L).description("thyme").build();
+        testIngredient2 = IngredientCommand.builder().id(2L).description("rosemary").build();
+        testIngredient3 = IngredientCommand.builder().id(3L).description("basile").build();
+
+        testRecipeCommand1.addIngredient(testIngredient1);
+        testRecipeCommand1.addIngredient(testIngredient2);
+        testRecipeCommand1.addIngredient(testIngredient3);
+
+        testIngredientAdd = IngredientCommand.builder().description("NEW").build();
+        testRecipeCommand1PostAdd.addIngredient(testIngredient1);
+        testRecipeCommand1PostAdd.addIngredient(testIngredient2);
+        testRecipeCommand1PostAdd.addIngredient(testIngredient3);
+        testRecipeCommand1PostAdd.addIngredient(testIngredientAdd);
+
+        testIngredient2Update = IngredientCommand.builder().id(2L).description("UPDATE").build();
+        testRecipeCommand1PostUpdate.addIngredient(testIngredient1);
+        testRecipeCommand1PostUpdate.addIngredient(testIngredient2Update);
+        testRecipeCommand1PostUpdate.addIngredient(testIngredient3);
 
     }
 
@@ -100,5 +129,7 @@ public class RecipeServiceImplTest {
         recipeService.deleteRecipe(1L);
         verify(recipeRepository,times(1)).deleteById(1L);
     }
+
+
 
 }

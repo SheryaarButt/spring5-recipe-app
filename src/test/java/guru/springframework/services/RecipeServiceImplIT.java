@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 
 @SpringBootTest
@@ -38,10 +38,15 @@ public class RecipeServiceImplIT {
 
     IngredientCommand testIng1;
     IngredientCommand testIng2;
-    Set<IngredientCommand> ingredients;
 
     UnitOfMeasureCommand testUom1;
     UnitOfMeasureCommand testUom2;
+    UnitOfMeasureCommand testUom3;
+
+    IngredientCommand testIngAdd;
+    IngredientCommand testIngUpdate;
+
+
 
 
     @Before
@@ -57,6 +62,7 @@ public class RecipeServiceImplIT {
 
         testUom1 = UnitOfMeasureCommand.builder().id(1L).uom("teaspoon").build();
         testUom2 = UnitOfMeasureCommand.builder().id(2L).uom("tablespoon").build();
+        testUom3 = UnitOfMeasureCommand.builder().id(3L).uom("dash").build();
 
         testIng1 = IngredientCommand.builder()
                 .amount(new BigDecimal("5.5"))
@@ -68,9 +74,17 @@ public class RecipeServiceImplIT {
                 .description("TestIngredient2")
                 .unitOfMeasure(testUom2)
                 .build();
-        ingredients = new HashSet<>();
-        ingredients.add(testIng1);
-        ingredients.add(testIng2);
+        testIngAdd = IngredientCommand.builder()
+                .amount(new BigDecimal("3.5"))
+                .description("ADD")
+                .unitOfMeasure(testUom3)
+                .build();
+        testIngUpdate = IngredientCommand.builder()
+                .id(12L)
+                .amount(new BigDecimal("3.5"))
+                .description("UPDATE")
+                .unitOfMeasure(testUom3)
+                .build();
 
         testRecipe = RecipeCommand.builder()
                 .notes(testNotes)
@@ -87,8 +101,6 @@ public class RecipeServiceImplIT {
         testRecipe.addCategory(testCat2);
         testRecipe.addIngredient(testIng1);
         testRecipe.addIngredient(testIng2);
-
-
     }
 
     @Test
@@ -97,5 +109,43 @@ public class RecipeServiceImplIT {
         Long savedId = returnRecipe.getId();
         Recipe foundRecipe = recipeRepository.findById(savedId).get();
         assertEquals(savedId,foundRecipe.getId());
+    }
+
+    @Test
+    public void saveIngredientUpdate(){
+        RecipeCommand returnRecipe = recipeService.saveRecipe(testRecipe);
+        assertNotEquals(returnRecipe
+                .getIngredients()
+                .stream()
+                .filter(ingredient ->
+                        ingredient.getId().equals(testIngUpdate.getId())
+                ).findFirst()
+                .get()
+                .getDescription(), testIngUpdate.getDescription());
+
+        assertEquals(recipeService.saveIngredient(returnRecipe.getId(),testIngUpdate)
+                .getIngredients()
+                .stream()
+                .filter(ingredient ->
+                            ingredient.getId().equals(testIngUpdate.getId())
+                ).findFirst()
+                .get()
+                .getDescription(), testIngUpdate.getDescription());
+    }
+
+    @Test
+    public void saveIngredientAdd(){
+        RecipeCommand returnRecipe = recipeService.saveRecipe(testRecipe);
+        Long addedRecipeId = returnRecipe
+                .getIngredients()
+                .stream()
+                .map(IngredientCommand::getId)
+                .max(Long::compareTo)
+                .get() + 1;
+
+        assertTrue(recipeService.saveIngredient(returnRecipe.getId(),testIngAdd)
+                .getIngredients()
+                .stream()
+                .anyMatch(ingredient -> ingredient.getId().equals(addedRecipeId)));
     }
 }
