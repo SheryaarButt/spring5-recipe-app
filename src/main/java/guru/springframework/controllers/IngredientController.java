@@ -3,6 +3,7 @@ package guru.springframework.controllers;
 import guru.springframework.commands.IngredientCommand;
 import guru.springframework.services.IngredientService;
 import guru.springframework.services.RecipeService;
+import guru.springframework.services.UnitOfMeasureService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,10 +18,13 @@ public class IngredientController {
 
     private RecipeService recipeService;
     private IngredientService ingredientService;
+    private UnitOfMeasureService unitOfMeasureService;
 
-    public IngredientController(RecipeService recipeService, IngredientService ingredientService) {
+    public IngredientController(RecipeService recipeService, IngredientService ingredientService,
+                                UnitOfMeasureService unitOfMeasureService) {
         this.recipeService = recipeService;
         this.ingredientService = ingredientService;
+        this.unitOfMeasureService = unitOfMeasureService;
     }
 
     @GetMapping("/recipe/{id:[1-9]\\d*}/ingredients")
@@ -45,6 +49,7 @@ public class IngredientController {
     public String newIngredientForm(@PathVariable String recipeId,Model model){
         model.addAttribute("recipeId",recipeId);
         model.addAttribute("ingredient", new IngredientCommand());
+        model.addAttribute("uomList",unitOfMeasureService.getUoms());
         return "recipe/ingredient/ingredientform";
     }
 
@@ -52,7 +57,7 @@ public class IngredientController {
     public String updateIngredientForm(@PathVariable String recipeId,@PathVariable String ingredientId,Model model){
         model.addAttribute("recipeId",recipeId);
         model.addAttribute("ingredient",ingredientService.getIngredient(Long.parseLong(ingredientId)));
-//        model.addAttribute("uomList",)
+        model.addAttribute("uomList",unitOfMeasureService.getUoms());
         return "recipe/ingredient/ingredientform";
     }
 

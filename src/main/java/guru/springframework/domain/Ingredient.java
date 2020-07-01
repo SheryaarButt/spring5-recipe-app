@@ -20,7 +20,7 @@ public class Ingredient extends BaseEntity{
     private BigDecimal amount;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    private UnitOfMeasure unitOfMeasure;
+    private UnitOfMeasure unitOfMeasure = new UnitOfMeasure();
 
     @Builder
     public Ingredient(Long id, String description, BigDecimal amount, UnitOfMeasure unitOfMeasure) {
