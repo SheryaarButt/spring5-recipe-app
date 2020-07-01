@@ -68,25 +68,6 @@ public class RecipeServiceImplTest {
         testRecipeCommand2 = RecipeCommand.builder().id(2L).build();
         testRecipeCommand3 = RecipeCommand.builder().id(3L).build();
 
-        testIngredient1 = IngredientCommand.builder().id(1L).description("thyme").build();
-        testIngredient2 = IngredientCommand.builder().id(2L).description("rosemary").build();
-        testIngredient3 = IngredientCommand.builder().id(3L).description("basile").build();
-
-        testRecipeCommand1.addIngredient(testIngredient1);
-        testRecipeCommand1.addIngredient(testIngredient2);
-        testRecipeCommand1.addIngredient(testIngredient3);
-
-        testIngredientAdd = IngredientCommand.builder().description("NEW").build();
-        testRecipeCommand1PostAdd.addIngredient(testIngredient1);
-        testRecipeCommand1PostAdd.addIngredient(testIngredient2);
-        testRecipeCommand1PostAdd.addIngredient(testIngredient3);
-        testRecipeCommand1PostAdd.addIngredient(testIngredientAdd);
-
-        testIngredient2Update = IngredientCommand.builder().id(2L).description("UPDATE").build();
-        testRecipeCommand1PostUpdate.addIngredient(testIngredient1);
-        testRecipeCommand1PostUpdate.addIngredient(testIngredient2Update);
-        testRecipeCommand1PostUpdate.addIngredient(testIngredient3);
-
     }
 
     @Test
