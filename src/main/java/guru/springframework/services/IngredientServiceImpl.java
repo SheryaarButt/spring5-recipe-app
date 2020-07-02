@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class IngredientServiceImpl implements IngredientService {
@@ -21,11 +23,9 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Override
     public Set<IngredientCommand> getIngredients() {
-        Set<IngredientCommand> returnIngredients = new HashSet<>();
-        ingredientRepository.findAll().forEach(foundIngredient -> {
-            returnIngredients.add(ingredientConverter.convertEntityToCommand(foundIngredient));
-        });
-        return returnIngredients;
+        return StreamSupport.stream(ingredientRepository.findAll().spliterator(),true)
+                    .map(ingredientConverter::convertEntityToCommand)
+                    .collect(Collectors.toCollection(HashSet::new));
     }
 
     @Override

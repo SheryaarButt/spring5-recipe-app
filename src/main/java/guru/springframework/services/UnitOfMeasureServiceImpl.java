@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class UnitOfMeasureServiceImpl implements UnitOfMeasureService {
@@ -22,10 +24,8 @@ public class UnitOfMeasureServiceImpl implements UnitOfMeasureService {
 
     @Override
     public Set<UnitOfMeasureCommand> getUoms() {
-        Set<UnitOfMeasureCommand> returnUoms = new TreeSet<>();
-        unitOfMeasureRepository.findAll().forEach(uom ->
-            returnUoms.add(unitOfMeasureConverter.convertEntityToCommand(uom))
-        );
-        return returnUoms;
+        return StreamSupport.stream(unitOfMeasureRepository.findAll().spliterator(),true)
+                    .map(unitOfMeasureConverter::convertEntityToCommand)
+                    .collect(Collectors.toCollection(TreeSet::new));
     }
 }

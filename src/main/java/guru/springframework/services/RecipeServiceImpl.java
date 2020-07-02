@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Slf4j
 @Service
@@ -31,12 +33,9 @@ public class RecipeServiceImpl implements RecipeService {
     @Transactional
     public Set<RecipeCommand> getRecipes() {
         log.debug("I'm in the service");
-
-        Set<RecipeCommand> foundRecipes = new HashSet<>();
-        recipeRepository.findAll().forEach(recipeEntity ->
-            foundRecipes.add(recipeConverter.convertEntityToCommand(recipeEntity))
-        );
-        return foundRecipes;
+        return StreamSupport.stream(recipeRepository.findAll().spliterator(),true)
+                    .map(recipeConverter::convertEntityToCommand)
+                    .collect(Collectors.toCollection(HashSet::new));
     }
 
     @Override
