@@ -7,13 +7,11 @@ import guru.springframework.services.UnitOfMeasureService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @Controller
+@RequestMapping("/recipe/{recipeId:[1-9]\\d*}/ingredient")
 public class IngredientController {
 
     private RecipeService recipeService;
@@ -27,25 +25,25 @@ public class IngredientController {
         this.unitOfMeasureService = unitOfMeasureService;
     }
 
-    @GetMapping("/recipe/{id:[1-9]\\d*}/ingredients")
-    public String showRecipeIngredients(@PathVariable String id, Model model){
-        model.addAttribute("recipe",recipeService.getRecipe(Long.parseLong(id)));
+    @GetMapping("/showAll")
+    public String showRecipeIngredients(@PathVariable String recipeId, Model model){
+        model.addAttribute("recipe",recipeService.getRecipe(Long.parseLong(recipeId)));
         return "recipe/ingredient/list";
     }
 
-    @GetMapping("/recipe/{recipeId:[1-9]\\d*}/ingredient/{ingredientId:[1-9]\\d*}/delete")
+    @GetMapping("/{ingredientId:[1-9]\\d*}/delete")
     public String deleteIngredient(@PathVariable String recipeId, @PathVariable String ingredientId){
         ingredientService.deleteIngredient(Long.parseLong(ingredientId));
-        return "redirect:/recipe/" + recipeId + "/ingredients";
+        return "redirect:/recipe/" + recipeId + "/ingredient/showAll";
     }
 
-    @GetMapping("/recipe/{recipeId:[1-9]\\d*}/ingredient/{ingredientId:[1-9]\\d*}/show")
+    @GetMapping("/{ingredientId:[1-9]\\d*}/show")
     public String show(@PathVariable String recipeId,@PathVariable String ingredientId, Model model){
         model.addAttribute("ingredient",ingredientService.getIngredient(Long.parseLong(ingredientId)));
         return "recipe/ingredient/show";
     }
 
-    @GetMapping("/recipe/{recipeId:[1-9]\\d*}/ingredient/new")
+    @GetMapping("/new")
     public String newIngredientForm(@PathVariable String recipeId,Model model){
         model.addAttribute("recipeId",recipeId);
         model.addAttribute("ingredient", new IngredientCommand());
@@ -53,7 +51,7 @@ public class IngredientController {
         return "recipe/ingredient/ingredientform";
     }
 
-    @GetMapping("/recipe/{recipeId:[1-9]\\d*}/ingredient/{ingredientId:[1-9]\\d*}/update")
+    @GetMapping("/{ingredientId:[1-9]\\d*}/update")
     public String updateIngredientForm(@PathVariable String recipeId,@PathVariable String ingredientId,Model model){
         model.addAttribute("recipeId",recipeId);
         model.addAttribute("ingredient",ingredientService.getIngredient(Long.parseLong(ingredientId)));
@@ -61,10 +59,10 @@ public class IngredientController {
         return "recipe/ingredient/ingredientform";
     }
 
-    @PostMapping("/recipe/{recipeId:[1-9]\\d*}/ingredient")
+    @PostMapping
     public String addOrUpdateIngredient(@ModelAttribute IngredientCommand ingredient, @PathVariable String recipeId){
         recipeService.saveIngredient(Long.parseLong(recipeId),ingredient);
-        return "redirect:/recipe/" + recipeId + "/ingredients";
+        return "redirect:/recipe/" + recipeId + "/ingredient/showAll";
     }
 
 }

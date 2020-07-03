@@ -49,7 +49,7 @@ public class IngredientControllerTest {
         when(recipeService.getRecipe(1L)).thenReturn(testRecipe);
 
         try{
-            mockMvc.perform(get("/recipe/1/ingredients"))
+            mockMvc.perform(get("/recipe/1/ingredient/showAll"))
                     .andExpect(status().isOk())
                     .andExpect(view().name("recipe/ingredient/list"))
                     .andExpect(model().attribute("recipe",testRecipe));
@@ -66,7 +66,7 @@ public class IngredientControllerTest {
         try{
             mockMvc.perform(get("/recipe/1/ingredient/2/delete"))
                     .andExpect(status().is3xxRedirection())
-                    .andExpect(view().name("redirect:/recipe/1/ingredients"));
+                    .andExpect(view().name("redirect:/recipe/1/ingredient/showAll"));
         } catch(Exception e){
             fail(e.getMessage());
         }
@@ -123,7 +123,7 @@ public class IngredientControllerTest {
         try{
             mockMvc.perform(post("/recipe/1/ingredient").contentType(MediaType.APPLICATION_FORM_URLENCODED))
                     .andExpect(status().is3xxRedirection())
-                    .andExpect(view().name("redirect:/recipe/1/ingredients"));
+                    .andExpect(view().name("redirect:/recipe/1/ingredient/showAll"));
         } catch(Exception e){
             fail(e.getMessage());
         }

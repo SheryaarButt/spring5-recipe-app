@@ -1,0 +1,49 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Image Upload Form</title>
+
+    <!--    Bootstrap CSS CDN-->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+          crossorigin="anonymous" th:href="@{/webjars/bootstrap/4.5.0/css/bootstrap.min.css}">
+
+    <script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
+
+    <!--    Bootstrap JavaScript CDN-->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+            integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+            crossorigin="anonymous" th:src="@{/webjars/bootstrap/4.5.0/js/bootstrap.min.js}"></script>
+</head>
+<body>
+<!--/*@thymesVar id="recipe" type="guru.springframework.domain.Recipe"*/-->
+<div class="container-fluid" style="margin-top: 20px">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="pannel-group">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h1 class="panel-title">Upload a new recipe image</h1>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <form  action="http:\\localhost" method="post" enctype="multipart/form-data"
+                                       th:action="@{'/recipe/' + ${recipeId} + '/image'}">
+                                    <label class="control-label">Select File</label>
+                                    <input id="imagefile" name="imagefile" type="file" class="file">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

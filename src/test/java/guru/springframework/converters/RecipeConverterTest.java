@@ -44,7 +44,7 @@ public class RecipeConverterTest {
     UnitOfMeasureCommand testUomCommand1;
     UnitOfMeasureCommand testUomCommand2;
 
-    Byte[] testImage = new Byte[5];
+    byte[] testImage = new byte[5];
 
     @Mock
     IngredientConverter ingredientConverter;
