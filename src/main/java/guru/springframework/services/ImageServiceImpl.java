@@ -29,12 +29,21 @@ public class ImageServiceImpl implements ImageService{
 
         if(foundRecipeOptional.isPresent()){
             Recipe foundRecipe = foundRecipeOptional.get();
+            byte[] imageBytes;
             try{
-                foundRecipe.setImage(imageFile.getBytes());
+                imageBytes = imageFile.getBytes();
             } catch(IOException e){
                 log.debug("Image file could not be converted to bytes: " + e.getMessage());
                 return;
             }
+            //box bytes
+            Byte[] boxedImageBytes = new Byte[imageBytes.length];
+            int i = 0;
+            for(byte b : imageBytes){
+                boxedImageBytes[i++] = b;
+            }
+
+            foundRecipe.setImage(boxedImageBytes);
             recipeRepository.save(foundRecipe);
         } else {
             log.debug("Recipe not found - recipeId: " + recipeId);

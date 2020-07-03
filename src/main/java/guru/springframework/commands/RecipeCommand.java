@@ -23,7 +23,7 @@ public class RecipeCommand {
     private String source;
     private String url;
     private String directions;
-    private byte[] image;
+    private Byte[] image;
     private Difficulty difficulty;
     private NotesCommand notes;
     private Set<IngredientCommand> ingredients = new HashSet<>();
@@ -33,7 +33,7 @@ public class RecipeCommand {
                          Integer prepTime, Integer cookTime,
                          Integer servings, String source,
                          String url, String directions,
-                         byte[] image, Difficulty difficulty,
+                         Byte[] image, Difficulty difficulty,
                          NotesCommand notes) {
         this.id = id;
         this.description = description;

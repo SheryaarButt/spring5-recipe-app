@@ -24,14 +24,20 @@ public class ImageServiceImplIT {
     @Test
     public void saveImage() {
         //given
-        Recipe recipe = Recipe.builder().id(99L).image("heythere".getBytes()).build();
+        byte[] primBytes = "heythere".getBytes();
+        Byte[] boxedBytes = new Byte[primBytes.length];
+        int i = 0;
+        for(byte b : primBytes){
+            boxedBytes[i++] = b;
+        }
+        Recipe recipe = Recipe.builder().id(99L).image(boxedBytes).build();
         Recipe savedRecipe = recipeRepository.save(recipe);
         byte[] imageBytes = "new file bytes".getBytes();
         MultipartFile imageFile = new MockMultipartFile("imagefile","text.txt","text/plain",imageBytes);
 
         //when
         imageService.saveImage(savedRecipe.getId(),imageFile);
-        byte[] updatedImageBytes = recipeRepository.findById(savedRecipe.getId()).get().getImage();
+        Byte[] updatedImageBytes = recipeRepository.findById(savedRecipe.getId()).get().getImage();
 
         //then
         assertEquals(imageBytes.length,updatedImageBytes.length);

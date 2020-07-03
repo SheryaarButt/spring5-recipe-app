@@ -33,7 +33,7 @@ public class Recipe extends BaseEntity{
 
     //Setting up BLOB in DB
     @Lob
-    private byte[] image;
+    private Byte[] image;
 
     @Enumerated(value = EnumType.STRING)
     private Difficulty difficulty;
@@ -49,7 +49,7 @@ public class Recipe extends BaseEntity{
     @Builder
     public Recipe(Long id, String description,
                   Integer prepTime, Integer cookTime, Integer servings,
-                  String source, String url, String directions, byte[] image,
+                  String source, String url, String directions, Byte[] image,
                   Difficulty difficulty, Notes notes) {
         super(id);
         this.description = description;
