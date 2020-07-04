@@ -3,6 +3,7 @@ package guru.springframework.services;
 import guru.springframework.converters.RecipeConverter;
 import guru.springframework.domain.Recipe;
 import guru.springframework.repositories.RecipeRepository;
+import guru.springframework.utils.RecipeAppUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,22 +33,13 @@ public class ImageServiceImpl implements ImageService{
 
         if(foundRecipeOptional.isPresent()){
             Recipe foundRecipe = foundRecipeOptional.get();
-            byte[] imageBytes;
             try{
-                imageBytes = imageFile.getBytes();
+                Byte[] imageBytes = RecipeAppUtils.boxBytes(imageFile.getBytes());
+                foundRecipe.setImage(imageBytes);
+                recipeRepository.save(foundRecipe);
             } catch(IOException e){
                 log.debug("Image file could not be converted to bytes: " + e.getMessage());
-                return;
             }
-            //box bytes
-            Byte[] boxedImageBytes = new Byte[imageBytes.length];
-            int i = 0;
-            for(byte b : imageBytes){
-                boxedImageBytes[i++] = b;
-            }
-
-            foundRecipe.setImage(boxedImageBytes);
-            recipeRepository.save(foundRecipe);
         } else {
             log.debug("Recipe not found - recipeId: " + recipeId);
         }

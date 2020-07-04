@@ -3,6 +3,7 @@ package guru.springframework.controllers;
 import guru.springframework.commands.RecipeCommand;
 import guru.springframework.services.ImageService;
 import guru.springframework.services.RecipeService;
+import guru.springframework.utils.RecipeAppUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.stereotype.Controller;
@@ -43,14 +44,9 @@ public class ImageController {
     @GetMapping
     public void getImage(@PathVariable String recipeId, HttpServletResponse response){
         RecipeCommand foundRecipe = recipeService.getRecipe(Long.parseLong(recipeId));
-        Byte[] boxedImage = foundRecipe.getImage();
-        if(boxedImage != null){
-            byte[] unboxedImage = new byte[boxedImage.length];
-            int i = 0;
-            for(Byte b : boxedImage){
-                unboxedImage[i++] = b;
-            }
-            try(InputStream is = new ByteArrayInputStream(unboxedImage)){
+        byte[] imageBytes = RecipeAppUtils.unboxBytes(foundRecipe.getImage());
+        if(imageBytes != null){
+            try(InputStream is = new ByteArrayInputStream(imageBytes)){
                 IOUtils.copy(is,response.getOutputStream());
                 response.setContentType("image/jpeg");
             } catch(IOException e){
