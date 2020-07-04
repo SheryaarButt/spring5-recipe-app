@@ -50,8 +50,7 @@ public class ImageController {
             for(Byte b : boxedImage){
                 unboxedImage[i++] = b;
             }
-            InputStream is = new ByteArrayInputStream(unboxedImage);
-            try{
+            try(InputStream is = new ByteArrayInputStream(unboxedImage)){
                 IOUtils.copy(is,response.getOutputStream());
                 response.setContentType("image/jpeg");
             } catch(IOException e){
