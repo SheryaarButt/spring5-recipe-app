@@ -30,7 +30,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    @Transactional
+    @org.springframework.transaction.annotation.Transactional
     public Set<RecipeCommand> getRecipes() {
         log.debug("I'm in the service");
         return StreamSupport.stream(recipeRepository.findAll().spliterator(),true)
@@ -39,7 +39,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    @Transactional
+    @org.springframework.transaction.annotation.Transactional
     public RecipeCommand getRecipe(Long id) {
         Recipe foundRecipe = recipeRepository.findById(id).orElse(null);
         return recipeConverter.convertEntityToCommand(foundRecipe);

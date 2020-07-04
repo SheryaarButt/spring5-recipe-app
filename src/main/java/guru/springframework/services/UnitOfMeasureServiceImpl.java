@@ -4,6 +4,7 @@ import guru.springframework.commands.UnitOfMeasureCommand;
 import guru.springframework.converters.UnitOfMeasureConverter;
 import guru.springframework.repositories.UnitOfMeasureRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 import java.util.TreeSet;
@@ -13,8 +14,8 @@ import java.util.stream.StreamSupport;
 @Service
 public class UnitOfMeasureServiceImpl implements UnitOfMeasureService {
 
-    private UnitOfMeasureRepository unitOfMeasureRepository;
-    private UnitOfMeasureConverter unitOfMeasureConverter;
+    private final UnitOfMeasureRepository unitOfMeasureRepository;
+    private final UnitOfMeasureConverter unitOfMeasureConverter;
 
     public UnitOfMeasureServiceImpl(UnitOfMeasureRepository unitOfMeasureRepository,
                                     UnitOfMeasureConverter unitOfMeasureConverter) {
@@ -23,6 +24,7 @@ public class UnitOfMeasureServiceImpl implements UnitOfMeasureService {
     }
 
     @Override
+    @Transactional
     public Set<UnitOfMeasureCommand> getUoms() {
         return StreamSupport.stream(unitOfMeasureRepository.findAll().spliterator(),true)
                     .map(unitOfMeasureConverter::convertEntityToCommand)
