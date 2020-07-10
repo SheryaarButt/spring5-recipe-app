@@ -42,11 +42,11 @@ public class ImageControllerTest {
     @Test
     public void updateImageForm() {
         //given
-
+        when(recipeService.getRecipe(anyLong())).thenReturn(RecipeCommand.builder().id(1L).build());
         //when
         try {
             mockMvc.perform(get("/recipe/1/image/update"))
-                        .andExpect(model().attributeExists("recipeId"))
+                        .andExpect(model().attributeExists("recipe"))
                         .andExpect(view().name("recipe/imageuploadform"))
                         .andExpect(status().isOk());
         } catch(Exception e){
@@ -60,11 +60,14 @@ public class ImageControllerTest {
 
         //given
         mockMultipartFile = new MockMultipartFile("imagefile","testing.txt","text/plain","Spring".getBytes());
+        when(recipeService.getRecipe(anyLong())).thenReturn(RecipeCommand.builder().id(1L).build());
+
 
         //when
         try{
             mockMvc.perform(multipart("/recipe/1/image").file(mockMultipartFile))
                     .andExpect(status().is3xxRedirection())
+                    .andExpect(model().attributeExists("recipe"))
                     .andExpect(header().string("Location","/recipe/1/show"));
         } catch(Exception e){
             fail(e.getMessage());

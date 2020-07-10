@@ -4,6 +4,7 @@ import guru.springframework.commands.IngredientCommand;
 import guru.springframework.commands.RecipeCommand;
 import guru.springframework.converters.RecipeConverter;
 import guru.springframework.domain.Recipe;
+import guru.springframework.exceptions.NotFoundException;
 import guru.springframework.repositories.RecipeRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -95,10 +96,9 @@ public class RecipeServiceImplTest {
         verify(recipeRepository,times(1)).findById(anyLong());
 
     }
-    @Test
+    @Test(expected = NotFoundException.class)
     public void getRecipeNotExists() {
         when(recipeRepository.findById(anyLong())).thenReturn(Optional.empty());
-        when(recipeConverter.convertEntityToCommand(null)).thenReturn(null);
 
         assertNull(recipeService.getRecipe(1L));
 

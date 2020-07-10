@@ -3,6 +3,7 @@ package guru.springframework.services;
 import guru.springframework.commands.IngredientCommand;
 import guru.springframework.converters.IngredientConverter;
 import guru.springframework.domain.Ingredient;
+import guru.springframework.exceptions.NotFoundException;
 import guru.springframework.repositories.IngredientRepository;
 import org.assertj.core.util.IterableUtil;
 import org.junit.Before;
@@ -88,15 +89,13 @@ public class IngredientServiceImplTest {
         verify(ingredientConverter,times(1)).convertEntityToCommand(testEntity2);
     }
 
-    @Test
+    @Test(expected = NotFoundException.class)
     public void getIngredientNotFound() {
         when(ingredientRepository.findById(4L)).thenReturn(Optional.empty());
-        when(ingredientConverter.convertEntityToCommand(null)).thenReturn(null);
 
         assertNull(ingredientService.getIngredient(4L));
 
         verify(ingredientRepository,times(1)).findById(4L);
-        verify(ingredientConverter,times(1)).convertEntityToCommand(null);
     }
 
 }

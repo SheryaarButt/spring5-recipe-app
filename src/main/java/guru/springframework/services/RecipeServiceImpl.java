@@ -4,6 +4,7 @@ import guru.springframework.commands.IngredientCommand;
 import guru.springframework.commands.RecipeCommand;
 import guru.springframework.converters.RecipeConverter;
 import guru.springframework.domain.Recipe;
+import guru.springframework.exceptions.NotFoundException;
 import guru.springframework.repositories.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    @org.springframework.transaction.annotation.Transactional
+    @Transactional
     public Set<RecipeCommand> getRecipes() {
         log.debug("I'm in the service");
         return StreamSupport.stream(recipeRepository.findAll().spliterator(),true)
@@ -39,9 +40,10 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    @org.springframework.transaction.annotation.Transactional
+    @Transactional
     public RecipeCommand getRecipe(Long id) {
-        Recipe foundRecipe = recipeRepository.findById(id).orElse(null);
+        Recipe foundRecipe = recipeRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Recipe id: " + id + " not found."));
         return recipeConverter.convertEntityToCommand(foundRecipe);
     }
 

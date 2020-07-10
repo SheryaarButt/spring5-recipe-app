@@ -2,6 +2,7 @@ package guru.springframework.controllers;
 
 import guru.springframework.commands.IngredientCommand;
 import guru.springframework.commands.RecipeCommand;
+import guru.springframework.exceptions.NotFoundException;
 import guru.springframework.services.IngredientService;
 import guru.springframework.services.RecipeService;
 import guru.springframework.services.UnitOfMeasureService;
@@ -41,7 +42,8 @@ public class IngredientControllerTest {
         testRecipe = RecipeCommand.builder().id(1L).build();
         testIngredient = IngredientCommand.builder().id(2L).build();
         ingredientController = new IngredientController(recipeService,ingredientService,unitOfMeasureService);
-        mockMvc = MockMvcBuilders.standaloneSetup(ingredientController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(ingredientController)
+                    .setControllerAdvice(new ExceptionHandlerController()).build();
     }
 
     @Test
@@ -82,6 +84,20 @@ public class IngredientControllerTest {
                     .andExpect(view().name("recipe/ingredient/show"))
                     .andExpect(model().attribute("ingredient",testIngredient))
                     .andExpect(status().isOk());
+        } catch(Exception e){
+            fail(e.getMessage());
+        }
+        verify(ingredientService,times(1)).getIngredient(anyLong());
+    }
+
+    @Test
+    public void showIngredientNotFound(){
+        when(ingredientService.getIngredient(2L)).thenThrow(new NotFoundException());
+        try{
+            mockMvc.perform(get("/recipe/1/ingredient/2/show"))
+                    .andExpect(view().name("404notfound"))
+                    .andExpect(model().attributeExists("exception"))
+                    .andExpect(status().isNotFound());
         } catch(Exception e){
             fail(e.getMessage());
         }

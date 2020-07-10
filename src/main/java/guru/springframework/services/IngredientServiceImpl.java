@@ -2,6 +2,7 @@ package guru.springframework.services;
 
 import guru.springframework.commands.IngredientCommand;
 import guru.springframework.converters.IngredientConverter;
+import guru.springframework.exceptions.NotFoundException;
 import guru.springframework.repositories.IngredientRepository;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +40,7 @@ public class IngredientServiceImpl implements IngredientService {
     @Override
     @org.springframework.transaction.annotation.Transactional
     public IngredientCommand getIngredient(Long id) {
-        return ingredientConverter.convertEntityToCommand(ingredientRepository.findById(id).orElse(null));
+        return ingredientConverter.convertEntityToCommand(ingredientRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Ingredient not found. Ingredient ID: " + id.toString())));
     }
 }
