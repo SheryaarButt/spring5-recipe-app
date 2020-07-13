@@ -6,10 +6,11 @@ orbs:
 workflows:
   maven_test:
     jobs:
-      - maven/test # checkout, build, test and upload test results
-      steps:
-        - store_artifacts:
-            path: /target
-            destination: artifact-file
-        - store_artifacts:
-            path: /target
+      build:
+        steps:
+          - maven/test # checkout, build, test and upload test results
+          - store_artifacts:
+              path: /target
+              destination: artifact-file
+          - store_artifacts:
+              path: /target
