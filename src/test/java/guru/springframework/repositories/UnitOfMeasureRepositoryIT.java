@@ -1,6 +1,5 @@
 package guru.springframework.repositories;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,17 +13,10 @@ import static junit.framework.TestCase.assertEquals;
 
 //Boots spring as normal
 @SpringBootTest
-
-//Configures spring data jpa and brings up embedded database - not a full spring boot
-//@DataJpaTest
 public class UnitOfMeasureRepositoryIT {
 
     @Autowired
     private UnitOfMeasureRepository unitOfMeasureRepository;
-
-    @Before
-    public void setUp() throws Exception {
-    }
 
     @Test
     public void findByUom() {

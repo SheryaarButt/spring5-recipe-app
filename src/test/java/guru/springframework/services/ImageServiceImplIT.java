@@ -30,7 +30,7 @@ public class ImageServiceImplIT {
         for(byte b : primBytes){
             boxedBytes[i++] = b;
         }
-        Recipe recipe = Recipe.builder().id(99L).image(boxedBytes).build();
+        Recipe recipe = Recipe.builder().image(boxedBytes).build();
         Recipe savedRecipe = recipeRepository.save(recipe);
         byte[] imageBytes = "new file bytes".getBytes();
         MultipartFile imageFile = new MockMultipartFile("imagefile","text.txt","text/plain",imageBytes);
@@ -41,5 +41,6 @@ public class ImageServiceImplIT {
 
         //then
         assertEquals(imageBytes.length,updatedImageBytes.length);
+        recipeRepository.deleteById(savedRecipe.getId());
     }
 }

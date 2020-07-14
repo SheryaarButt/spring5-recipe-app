@@ -1,6 +1,9 @@
 package guru.springframework.services;
 
-import guru.springframework.commands.*;
+import guru.springframework.commands.IngredientCommand;
+import guru.springframework.commands.NotesCommand;
+import guru.springframework.commands.RecipeCommand;
+import guru.springframework.commands.UnitOfMeasureCommand;
 import guru.springframework.domain.Difficulty;
 import guru.springframework.domain.Recipe;
 import guru.springframework.repositories.RecipeRepository;
@@ -12,8 +15,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Set;
 
 import static org.junit.Assert.*;
 
@@ -28,62 +29,48 @@ public class RecipeServiceImplIT {
     @Autowired
     RecipeService recipeService;
 
+    @Autowired
+    UnitOfMeasureService unitOfMeasureService;
+
+
     RecipeCommand testRecipe;
 
     NotesCommand testNotes;
 
-    CategoryCommand testCat1;
-    CategoryCommand testCat2;
-    Set<CategoryCommand> categories;
-
     IngredientCommand testIng1;
     IngredientCommand testIng2;
 
-    UnitOfMeasureCommand testUom1;
-    UnitOfMeasureCommand testUom2;
-    UnitOfMeasureCommand testUom3;
+    UnitOfMeasureCommand testUom;
 
     IngredientCommand testIngAdd;
     IngredientCommand testIngUpdate;
-
-
-
 
     @Before
     public void setUp() throws Exception {
 
         testNotes = NotesCommand.builder().recipeNotes("TestNotes").build();
 
-        testCat1 = CategoryCommand.builder().id(1L).categoryName("American").build();
-        testCat2 = CategoryCommand.builder().id(2L).categoryName("Mexican").build();
-        categories = new HashSet<>();
-        categories.add(testCat1);
-        categories.add(testCat2);
-
-        testUom1 = UnitOfMeasureCommand.builder().id(1L).uom("teaspoon").build();
-        testUom2 = UnitOfMeasureCommand.builder().id(2L).uom("tablespoon").build();
-        testUom3 = UnitOfMeasureCommand.builder().id(3L).uom("dash").build();
+        testUom = unitOfMeasureService.getUoms().stream().findFirst().get();
 
         testIng1 = IngredientCommand.builder()
                 .amount(new BigDecimal("5.5"))
                 .description("TestIngredient1")
-                .unitOfMeasure(testUom1)
+                .unitOfMeasure(testUom)
                 .build();
         testIng2 = IngredientCommand.builder()
                 .amount(new BigDecimal("3.5"))
                 .description("TestIngredient2")
-                .unitOfMeasure(testUom2)
+                .unitOfMeasure(testUom)
                 .build();
         testIngAdd = IngredientCommand.builder()
                 .amount(new BigDecimal("3.5"))
                 .description("ADD")
-                .unitOfMeasure(testUom3)
+                .unitOfMeasure(testUom)
                 .build();
         testIngUpdate = IngredientCommand.builder()
-                .id(12L)
                 .amount(new BigDecimal("3.5"))
                 .description("UPDATE")
-                .unitOfMeasure(testUom3)
+                .unitOfMeasure(testUom)
                 .build();
 
         testRecipe = RecipeCommand.builder()
@@ -97,8 +84,6 @@ public class RecipeServiceImplIT {
                 .source("TestSource")
                 .url("TestURL")
                 .build();
-        testRecipe.addCategory(testCat1);
-        testRecipe.addCategory(testCat2);
         testRecipe.addIngredient(testIng1);
         testRecipe.addIngredient(testIng2);
     }
@@ -109,11 +94,17 @@ public class RecipeServiceImplIT {
         Long savedId = returnRecipe.getId();
         Recipe foundRecipe = recipeRepository.findById(savedId).get();
         assertEquals(savedId,foundRecipe.getId());
+        recipeRepository.deleteById(savedId);
     }
 
     @Test
     public void saveIngredientUpdate(){
         RecipeCommand returnRecipe = recipeService.saveRecipe(testRecipe);
+
+        Long updateId = returnRecipe.getIngredients().stream().findFirst().get().getId();
+
+        testIngUpdate.setId(updateId);
+
         assertNotEquals(returnRecipe
                 .getIngredients()
                 .stream()
@@ -131,6 +122,8 @@ public class RecipeServiceImplIT {
                 ).findFirst()
                 .get()
                 .getDescription(), testIngUpdate.getDescription());
+
+        recipeRepository.deleteById(returnRecipe.getId());
     }
 
     @Test

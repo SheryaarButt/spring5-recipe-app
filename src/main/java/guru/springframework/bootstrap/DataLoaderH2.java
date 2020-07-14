@@ -6,6 +6,7 @@ import guru.springframework.repositories.RecipeRepository;
 import guru.springframework.repositories.UnitOfMeasureRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
@@ -13,15 +14,16 @@ import java.math.BigDecimal;
 
 @Slf4j
 @Component
-public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
+@Profile("default")
+public class DataLoaderH2 implements ApplicationListener<ContextRefreshedEvent> {
 
     private final CategoryRepository categoryRepository;
     private final RecipeRepository recipeRepository;
     private final UnitOfMeasureRepository unitOfMeasureRepository;
 
-    public DataLoader(CategoryRepository categoryRepository,
-                      RecipeRepository recipeRepository,
-                      UnitOfMeasureRepository unitOfMeasureRepository) {
+    public DataLoaderH2(CategoryRepository categoryRepository,
+                        RecipeRepository recipeRepository,
+                        UnitOfMeasureRepository unitOfMeasureRepository) {
         this.categoryRepository = categoryRepository;
         this.recipeRepository = recipeRepository;
         this.unitOfMeasureRepository = unitOfMeasureRepository;
@@ -29,7 +31,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-        log.debug("Loading data!");
+        log.debug("Loading H2 data!");
         dataLoad();
     }
 
@@ -46,19 +48,10 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
         recipe.setSource("https://www.simplyrecipes.com/recipes/perfect_guacamole/");
         recipe.setUrl("https://www.simplyrecipes.com/recipes/perfect_guacamole/");
 
-        UnitOfMeasure tsp = new UnitOfMeasure();
-        tsp.setUom("teaspoon");
-        UnitOfMeasure tsb = new UnitOfMeasure();
-        tsb.setUom("tablespoon");
-        UnitOfMeasure dash = new UnitOfMeasure();
-        dash.setUom("dash");
-        UnitOfMeasure each = new UnitOfMeasure();
-        each.setUom("each");
-
-        unitOfMeasureRepository.save(tsp);
-        unitOfMeasureRepository.save(tsb);
-        unitOfMeasureRepository.save(dash);
-        unitOfMeasureRepository.save(each);
+        UnitOfMeasure tsp = unitOfMeasureRepository.findByUom("teaspoon").orElse(null);
+        UnitOfMeasure tsb = unitOfMeasureRepository.findByUom("tablespoon").orElse(null);
+        UnitOfMeasure dash = unitOfMeasureRepository.findByUom("dash").orElse(null);
+        UnitOfMeasure each = unitOfMeasureRepository.findByUom("each").orElse(null);
 
         Ingredient ingredient1 = new Ingredient();
         ingredient1.setDescription("ripe avocados");
@@ -110,22 +103,10 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
         ingredient10.setAmount(null);
         ingredient10.setUnitOfMeasure(each);
 
-        Category american = new Category();
-        american.setCategoryName("American");
-
-        Category mexican = new Category();
-        mexican.setCategoryName("Mexican");
-
-        Category spanish = new Category();
-        spanish.setCategoryName("Spanish");
-
-        Category veggie = new Category();
-        veggie.setCategoryName("Vegetarian");
-
-        categoryRepository.save(american);
-        categoryRepository.save(mexican);
-        categoryRepository.save(spanish);
-        categoryRepository.save(veggie);
+        Category american = categoryRepository.findByCategoryName("American").orElse(null);
+        Category mexican = categoryRepository.findByCategoryName("Mexican").orElse(null);
+        Category spanish = categoryRepository.findByCategoryName("Spanish").orElse(null);
+        Category veggie = categoryRepository.findByCategoryName("Vegetarian").orElse(null);
 
         recipe.addIngredient(ingredient1);
         recipe.addIngredient(ingredient2);
