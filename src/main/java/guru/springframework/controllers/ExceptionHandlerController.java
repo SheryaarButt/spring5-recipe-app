@@ -20,4 +20,13 @@ public class ExceptionHandlerController {
 
         return new ModelAndView("404notfound").addObject("exception",exception);
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(NumberFormatException.class)
+    public ModelAndView badNumberException(Exception exception){
+        log.debug("Handling number format exception");
+        log.debug(exception.getMessage());
+
+        return new ModelAndView("400badrequest").addObject("exception",exception);
+    }
 }

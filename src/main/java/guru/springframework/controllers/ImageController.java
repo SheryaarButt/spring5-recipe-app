@@ -17,7 +17,7 @@ import java.io.InputStream;
 
 @Slf4j
 @Controller
-@RequestMapping("/recipe/{recipeId:[1-9]\\d*}/image")
+@RequestMapping("/recipe/{recipeId}/image")
 public class ImageController {
 
     private ImageService imageService;
@@ -35,6 +35,7 @@ public class ImageController {
 
     @GetMapping("/update")
     public String updateImageForm(){
+
         return "recipe/imageuploadform";
     }
 

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 
@@ -23,16 +24,10 @@ public class RecipeController {
     }
 
 
-    @GetMapping("/{id:[1-9]\\d*}/show")
-    public String show(@PathVariable String id, Model model){
-
-        RecipeCommand returnRecipe;
-        if((returnRecipe = recipeService.getRecipe(Long.parseLong(id))) != null){
-            model.addAttribute("recipe",returnRecipe);
-            return "recipe/show";
-        } else {
-            return "recipe/error";
-        }
+    @GetMapping("/{id}/show")
+    public ModelAndView show(@PathVariable Long id, Model model){
+        return new ModelAndView("recipe/show")
+                    .addObject("recipe",recipeService.getRecipe(id));
     }
 
     @GetMapping("/new")
@@ -41,14 +36,9 @@ public class RecipeController {
         return "recipe/recipeform";
     }
 
-    @GetMapping("/{id:[1-9]\\d*}/update")
-    public String updateRecipe(@PathVariable String id, Model model){
-
-        RecipeCommand foundRecipe = recipeService.getRecipe(Long.parseLong(id));
-        if(foundRecipe == null){
-            log.debug("Recipe not found");
-            return "recipe/error";
-        }
+    @GetMapping("/{id}/update")
+    public String updateRecipe(@PathVariable Long id, Model model){
+        RecipeCommand foundRecipe = recipeService.getRecipe(id);
         model.addAttribute("recipe",foundRecipe);
         return "recipe/recipeform";
     }
@@ -65,10 +55,10 @@ public class RecipeController {
         return "redirect:/recipe/" + savedRecipe.getId() + "/show";
     }
 
-    @GetMapping("/{id:[1-9]\\d*}/delete")
-    public String delete(@PathVariable String id){
+    @GetMapping("/{id}/delete")
+    public String delete(@PathVariable Long id){
         log.debug("Deleting recipe: " + id);
-        recipeService.deleteRecipe(Long.parseLong(id));
-        return "redirect:/";
+        recipeService.deleteRecipe(id);
+        return "redirect:";
     }
 }

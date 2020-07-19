@@ -80,7 +80,9 @@ public class RecipeControllerTest {
 
         try{
             mockMvc.perform(MockMvcRequestBuilders.get("/recipe/1sasd/show"))
-                    .andExpect(MockMvcResultMatchers.status().isNotFound());
+                    .andExpect(MockMvcResultMatchers.status().is4xxClientError())
+                    .andExpect(view().name("400badrequest"))
+                    .andExpect(model().attributeExists("exception"));
         } catch(Exception e){
             fail(e.getMessage());
         }
@@ -109,7 +111,9 @@ public class RecipeControllerTest {
 
         try{
             mockMvc.perform(MockMvcRequestBuilders.get("/recipe/92sfa1/update"))
-                    .andExpect(MockMvcResultMatchers.status().isNotFound());
+                    .andExpect(MockMvcResultMatchers.status().is4xxClientError())
+                    .andExpect(view().name("400badrequest"))
+                    .andExpect(model().attributeExists("exception"));
         } catch (Exception e){
             fail(e.getMessage());
         }
@@ -117,18 +121,18 @@ public class RecipeControllerTest {
         verify(recipeService,never()).getRecipe(any());
     }
 
-    @Test
-    public void updateIdInvalidFormat2(){
-
-        try{
-            mockMvc.perform(MockMvcRequestBuilders.get("/recipe/01/update"))
-                    .andExpect(MockMvcResultMatchers.status().isNotFound());
-        } catch (Exception e){
-            fail(e.getMessage());
-        }
-
-        verify(recipeService,never()).getRecipe(any());
-    }
+//    @Test
+//    public void updateIdInvalidFormat2(){
+//
+//        try{
+//            mockMvc.perform(MockMvcRequestBuilders.get("/recipe/01/update"))
+//                    .andExpect(MockMvcResultMatchers.status().isNotFound());
+//        } catch (Exception e){
+//            fail(e.getMessage());
+//        }
+//
+//        verify(recipeService,never()).getRecipe(any());
+//    }
 
     @Test
     public void updateIdSuccess(){
@@ -215,7 +219,7 @@ public class RecipeControllerTest {
         try{
             mockMvc.perform(MockMvcRequestBuilders.get("/recipe/1/delete"))
                     .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-                    .andExpect(MockMvcResultMatchers.view().name("redirect:/"));
+                    .andExpect(MockMvcResultMatchers.view().name("redirect:"));
         } catch(Exception e){
             fail(e.getMessage());
         }
